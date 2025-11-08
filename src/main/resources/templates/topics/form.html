@@ -1,0 +1,53 @@
+<!-- topics/form.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Define the content fragment inside the template -->
+<div th:fragment="content">
+	<div th:replace="fragments/header :: header"></div>
+	<h2 th:text="${topic != null and topic.id != null ? 'Edit Topic' : 'Create Topic'}"></h2>
+	<form th:action="@{/app/topics/save}" th:object="${topic}" method="post">
+
+		<input type="hidden" th:field="*{id}" />
+		<div class="mb-3">
+			<label>Classroom</label>
+
+			<select class="form-select" name="classRoom.id"  onchange="redirectToSubjects(this.value)">
+				<option th:each="c : ${classroomList}" th:value="${c.id}" th:text="${c.className}" th:selected="${selectedClassId} == ${c.id}"></option>
+			</select>
+		</div>
+
+		<div class="mb-3">
+			<label>Subjects Name</label>
+			<select class="form-select" th:field="*{subject}">
+				<option th:each="c : ${subjectList}" th:value="${c.id}" th:text="${c.subjectName}"></option>
+			</select>
+		</div>
+		<div class="mb-3">
+			<label for="topicName" class="form-label">Topic Name</label>
+			<input type="text" th:field="*{topicName}" class="form-control" id="topicName"
+				placeholder="Enter topic name">
+		</div>
+		<div class="mb-3">
+			<label for="description" class="form-label">Description</label>
+			<textarea th:field="*{description}" class="form-control" id="description" rows="3"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary">Save</button>
+	</form>
+</div>
+
+<!-- This is the only thing that should render the layout -->
+<div th:replace="~{layout :: layout(~{::content})}"></div>
+
+<script>
+    function redirectToSubjects(classId) {
+        if (classId) {
+            window.location.href = '/app/topics/new?classId=' + classId;
+        } else {
+            // optional: go back to main list when nothing selected
+            window.location.href = '/app/topics/new';
+        }
+    }
+</script>
+
+</html>

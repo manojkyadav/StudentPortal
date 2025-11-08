@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Topics</title>
+	<meta name="description" content="A beautiful responsive dashboard template built with HTML5 and CSS3." />
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div class="container">
+		<!-- Include header -->
+		<div th:replace="~{fragments/header :: header}"></div>
+
+		<div class="layout">
+			<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+			<!-- Main content -->
+			<main class="content">
+				<div class="container">
+					<section class="card">
+						<h3>Create Topic</h3>
+						<form th:action="@{/admin/addtopics}" method="post">
+							<select name="className">
+								<option value="">Select Class</option>
+								<option th:each="cls : ${classList}" th:value="${cls.className}"
+									th:text="${cls.className}">
+								</option>
+							</select>
+							<select name="subjectName">
+								<option value="">Select Subject</option>
+								<option th:each="sub : ${subjectList}" th:value="${sub.subjectName}"
+									th:text="${sub.subjectName}">
+								</option>
+							</select>
+							<input type="text" name="topicName" placeholder="topicName" />
+							<button class="btn" type="submit">Create</button>
+						</form>
+					</section>
+					<h2>Topic Details</h2>
+					<section class="grid">
+						<div class="card">
+							<table class="table">
+								<tr>
+									<th>Class Name</th>
+									<th>Subject Name</th>
+									<th>Topic Name</th>
+									<th>Action</th>
+								</tr>
+								<tr th:each="cl: ${topicList}">
+									<td th:text="${cl.className}"></td>
+									<td th:text="${cl.subjectName}"></td>
+									<td th:text="${cl.topicName}"></td>
+									<td>
+										<!-- ✅ Option 1: Edit link -->
+										<a th:href="@{/admin/edit}" class="btn btn-primary btn-sm">Edit</a>
+
+										<!-- ✅ Option 2: Delete button -->
+										<a th:href="@{/admin/deletetopic/{topicid}(topicid=${cl.id})}"
+											class="btn btn-danger btn-sm"
+											onclick="return confirm('Are you sure you want to delete this country?')">
+											Delete
+										</a>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</section>
+				</div>
+			</main>
+		</div>
+
+		<!-- Include header -->
+		<div th:replace="~{fragments/footer :: footer}"></div>
+	</div>
+</body>
+
+</html>

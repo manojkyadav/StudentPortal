@@ -1,0 +1,126 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="content">
+	<div th:replace="fragments/header :: header"></div>
+	<h2 th:text="${question.id} != null ? 'Edit Question' : 'New Question'">New Question</h2>
+
+	<form th:action="@{/app/questions/save}" th:object="${question}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<div class="mb-3">
+			<label>Classroom</label>
+
+			<select class="form-select" name="classRoom.id" onchange="redirectToQuestion(this.value)">
+				<option th:each="c : ${classroomList}" th:value="${c.id}" th:text="${c.className}"
+					th:selected="${selectedClassId} == ${c.id}"></option>
+			</select>
+		</div>
+
+		<div class="mb-3">
+			<label>Subjects Name</label>
+			<select class="form-select" name="subject.id" onchange="redirectToSubjects(this.value)">
+				<option th:each="c : ${subjectList}" th:value="${c.id}" th:text="${c.subjectName}"
+					th:selected="${selectedSubjectId} == ${c.id}"></option>
+			</select>
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Topic</label>
+			<select class="form-select" name="topics.id">
+				<option th:each="t : ${topicList}" th:value="${t.id}" th:text="${t.topicName}">Topic</option>
+			</select>
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Question Text</label>
+			<input type="text" class="form-control" th:field="*{questionTxt}" placeholder="Enter question " />
+		</div>
+
+		<div class="mb-3">
+			<label class="form-label">Difficulty</label>
+			<select class="form-select" th:field="*{difficultyLevel}">
+				<option th:value="EASY">EASY</option>
+				<option th:value="MEDIUM">MEDIUM</option>
+				<option th:value="HARD">HARD</option>
+			</select>
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Question Type</label>
+			<select class="form-select" th:field="*{questionType}" id="questionType">
+				<option th:value="MULTIPLE_CHOICE">Multiple Choice</option>
+				<option th:value="TRUE_FALSE">True / False</option>
+				<option th:value="SHORT_ANSWER">Short Answer</option>
+				<option th:value="FILL_IN_THE_BLANK">Fill in the Blank</option>
+				<option th:value="MATCHING">Matching</option>
+			</select>
+		</div>
+
+		<!-- Multiple Choice Options Section -->
+		<div id="multipleChoiceSection" style="display:none;">
+			<label class="form-label">Options</label>
+			<div id="optionContainer">
+				<div class="d-flex mb-2 option-row">
+					<input type="text" name="optionText" class="form-control me-2" placeholder="Option text">
+					<input type="checkbox" name="correctOptionIndex" value="0"> Correct
+				</div>
+			</div>
+			<button type="button" class="btn btn-sm btn-outline-primary" onclick="addOption()">+ Add Option</button>
+		</div>
+
+		<div class="mb-3">
+			<button class="btn btn-primary" type="submit">Save</button>
+			<a class="btn btn-secondary" th:href="@{/app/questions}">Cancel</a>
+		</div>
+	</form>
+</div>
+<!-- This is the only thing that should render the layout -->
+<div th:replace="~{layout :: layout(~{::content})}"></div>
+
+<script>
+	function redirectToQuestion(classId) {
+		if (classId) {
+			window.location.href = '/app/questions/new?classId=' + classId;
+		} else {
+			// optional: go back to main list when nothing selected
+			window.location.href = '/app/questions/new';
+		}
+	}
+
+	function redirectToSubjects(subjectId) {
+		const select = document.querySelector('select[name="classRoom.id"]');
+		const selectedOption = select.options[select.selectedIndex];
+		const classId = selectedOption.value;
+
+		if (subjectId) {
+			window.location.href = '/app/questions/new?subjectId=' + subjectId + '&classId=' + classId;
+		} else {
+			// optional: go back to main list when nothing selected
+			window.location.href = '/app/questions/new';
+		}
+	}
+</script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const typeSelect = document.getElementById("questionType");
+		const mcSection = document.getElementById("multipleChoiceSection");
+
+		function toggleOptionSection() {
+			mcSection.style.display = typeSelect.value === "MULTIPLE_CHOICE" ? "block" : "none";
+		}
+
+		typeSelect.addEventListener("change", toggleOptionSection);
+		toggleOptionSection(); // Initialize on load
+	});
+
+	function addOption() {
+		const container = document.getElementById("optionContainer");
+		const index = container.children.length;
+		const div = document.createElement("div");
+		div.className = "d-flex mb-2 option-row";
+		div.innerHTML = `
+        <input type="text" name="optionText" class="form-control me-2" placeholder="Option text">
+        <input type="checkbox" name="correctOptionIndex" value="${index}"> Correct
+    `;
+		container.appendChild(div);
+	}
+</script>
+
+</html>

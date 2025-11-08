@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Define the content fragment inside the template -->
+<div th:fragment="content">
+	<div th:replace="fragments/header :: header"></div>
+    <h2 th:text="${quiz.id != null ? 'Edit Quiz' : 'New Quiz'}"></h2>
+    <form th:action="@{/app/quizzes/save}" th:object="${quiz}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+      <div class="mb-3">
+        <label>Title</label>
+        <input class="form-control" th:field="*{title}" required/>
+      </div>
+      <div class="mb-3">
+        <label>Description</label>
+        <textarea class="form-control" th:field="*{description}"></textarea>
+      </div>
+      <div class="mb-3">
+        <label>Status</label>
+        <select class="form-select" th:field="*{status}">
+          <option>ACTIVE</option>
+          <option>INACTIVE</option>
+        </select>
+      </div>
+      <button class="btn btn-primary">Save</button>
+      <a class="btn btn-secondary" th:href="@{/app/quizzes}">Cancel</a>
+    </form>
+  </div>
+  <!-- This is the only thing that should render the layout -->
+  <div th:replace="~{layout :: layout(~{::content})}"></div>
+</html>

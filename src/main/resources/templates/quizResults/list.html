@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Define the content fragment inside the template -->
+<div th:fragment="content">
+	<div th:replace="fragments/header :: header"></div>
+    <h2>Quiz Results</h2>
+    <a class="btn btn-primary mb-3" th:href="@{/app/quiz-results/new}">New Result</a>
+    <table class="table table-striped">
+      <thead><tr><th>ID</th><th>Quiz</th><th>Student</th><th>Score</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr th:each="r : ${results}">
+          <td th:text="${r.id}"></td>
+          <td th:text="${r.quizManagement?.title}"></td>
+          <td th:text="${r.student?.studentName}"></td>
+          <td th:text="${r.score}"></td>
+          <td>
+            <a th:href="@{|/app/quiz-results/edit/${r.id}|}" class="btn btn-sm btn-outline-primary">Edit</a>
+            <a th:href="@{|/app/quiz-results/delete/${r.id}|}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete?')">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- This is the only thing that should render the layout -->
+  <div th:replace="~{layout :: layout(~{::content})}"></div>
+</html>

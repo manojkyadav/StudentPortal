@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Define the content fragment inside the template -->
+<div th:fragment="content">
+	<div th:replace="fragments/header :: header"></div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Topics</h2>
+      <a class="btn btn-primary" th:href="@{/app/topics/new}">New Topic</a>
+    </div>
+
+    <table class="table table-striped">
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Subject</th><th>Class</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="t : ${topics}">
+          <td th:text="${t.id}">1</td>
+          <td th:text="${t.topicName}">Topic</td>
+          <td th:text="${t.subject?.subjectName}">Subject</td>
+          <td th:text="${t.classRoom?.className}">Class</td>
+          <td th:text="${t.status}">ACTIVE</td>
+          <td>
+            <a th:href="@{|/app/topics/edit/${t.id}|}" class="btn btn-sm btn-outline-primary">Edit</a>
+            <a th:href="@{|/app/topics/delete/${t.id}|}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete?')">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- This is the only thing that should render the layout -->
+  <div th:replace="~{layout :: layout(~{::content})}"></div>
+</html>
