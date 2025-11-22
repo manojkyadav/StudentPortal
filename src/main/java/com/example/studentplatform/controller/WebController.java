@@ -282,9 +282,30 @@ public class WebController {
 	}
 
     @GetMapping("/questions/edit/{id}")
-    public String editQuestion(@PathVariable Integer id, Model model) {
-        model.addAttribute("question", questionService.findById(id));
-        model.addAttribute("topics", topicService.findAll());
+	public String editQuestion(@PathVariable Integer id, @RequestParam(required = false) Integer classId,
+			@RequestParam(required = false) Integer subjectId, @RequestParam(required = false) Integer topicId,
+			Model model) {
+		model.addAttribute("question", questionService.findById(id));
+		//model.addAttribute("topics", topicService.findAll());
+
+		//model.addAttribute("question", new Question());
+		// model.addAttribute("topics", topicService.findAll());
+
+		model.addAttribute("selectedClassId", classId);
+		model.addAttribute("selectedSubjectId", subjectId);
+		model.addAttribute("selectedTopicId", topicId);
+
+		List<ClassRoom> classroomList = classroomService.findAll();
+		model.addAttribute("classroomList", classroomList);
+
+		if (classId != null) {
+			model.addAttribute("subjectList", subjectService.getSubjectsByClassId(classId));
+
+		}
+		if (subjectId != null) {
+			model.addAttribute("topicList", topicService.getTopicBySubjectId(subjectId));
+
+		}
         return "questions/form";
     }
 
@@ -299,14 +320,17 @@ public class WebController {
         ra.addFlashAttribute("success", "Question saved");
 
         // Handle options only for multiple-choice questions
-        if (question.getQuestionType() == Question.QuestionType.MULTIPLE_CHOICE && optionText != null) {
-            List<QuestionOption> options = new ArrayList<>();
-            for (int i = 0; i < optionText.size(); i++) {
-                QuestionOption opt = new QuestionOption();
-                opt.setQuestion(savedQuestion);
-                opt.setOptionText(optionText.get(i));
-                opt.setIsCorrect(correctOptionIndex != null && correctOptionIndex.contains(i));
-                options.add(opt);
+        //if (question.getQuestionType() == Question.QuestionType.MULTIPLE_CHOICE && optionText != null) {
+        if (question.getQuestionType() == Question.QuestionType.MULTIPLE_CHOICE && question.getOptions() != null) {
+            List<QuestionOption> options = question.getOptions();//new ArrayList<>();
+            for (int i = 0; i < options.size(); i++) {
+				/*
+				 * QuestionOption opt = new QuestionOption();
+				 * opt.setQuestionId(savedQuestion.getId());
+				 * opt.setOptionText(optionText.get(i)); opt.setIsCorrect(correctOptionIndex !=
+				 * null && correctOptionIndex.contains(i)); options.add(opt);
+				 */
+            	options.get(i).setQuestionId(savedQuestion.getId());
             }
             optionService.saveAll(options);
         }
@@ -365,12 +389,19 @@ public class WebController {
     @GetMapping("/students/new")
     public String newStudentForm(Model model) {
         model.addAttribute("student", new Student());
+        
+        List<ClassRoom> classroomList = classroomService.findAll();
+		model.addAttribute("classroomList", classroomList);
         return "students/form";
     }
 
     @GetMapping("/students/edit/{id}")
     public String editStudent(@PathVariable Integer id, Model model) {
         model.addAttribute("student", studentService.findById(id));
+        
+        List<ClassRoom> classroomList = classroomService.findAll();
+		model.addAttribute("classroomList", classroomList);
+		
         return "students/form";
     }
 

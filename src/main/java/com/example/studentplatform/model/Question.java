@@ -47,7 +47,7 @@ public class Question {
     @Column(name = "question_type", nullable = false)
     private QuestionType questionType = QuestionType.MULTIPLE_CHOICE;
 	
-	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "questionId", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<QuestionOption> options = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
