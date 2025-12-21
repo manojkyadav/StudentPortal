@@ -1,27 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <div th:fragment="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" th:href="@{/app/topics}">School Admin</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="nav">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item"><a class="nav-link" th:href="@{/app/country}">Country</a></li>
-			<li class="nav-item"><a class="nav-link" th:href="@{/app/classroom}">Class Room</a></li>
-			<li class="nav-item"><a class="nav-link" th:href="@{/app/subjects}">Subjects</a></li>
-			<li class="nav-item"><a class="nav-link" th:href="@{/app/topics}">Topics</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/app/questions}">Questions</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/app/options}">Options</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/app/students}">Students</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/app/quizzes}">Quizzes</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/app/leaderboard}">Leaderboard</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/app/notifications}">Notifications</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </div>
+<body>
+
+<div th:fragment="header">
+    <header class="header">
+        <h1 th:text="${pageTitle}">Dashboard</h1>
+        <p th:text="${pageSubtitle}">Welcome to your portal</p>
+    </header>
+</div>
+
+</body>
 </html>

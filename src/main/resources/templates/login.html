@@ -1,35 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="utf-8" />
+	<meta charset="UTF-8" />
 	<title>Login</title>
-	<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
-	<!-- Header with Banner -->
-	<header class="header">
 
-		<div class="header-content">
-			<div class="logo">MyDashboard</div>
-			<nav class="nav">
-				<a href="#">Home</a>
-				<a href="#">Profile</a>
-				<a href="#">Settings</a>
-				<a href="#">Logout</a>
-			</nav>
+	<div class="auth-container">
+		<div class="auth-box">
+
+			<h1 class="auth-title">Welcome Back</h1>
+			<p class="auth-subtitle">Sign in to continue to your learning portal</p>
+			<!-- Error Message -->
+			<div th:if="${error}" class="alert alert-error">
+				<span th:text="${error}"></span>
+			</div>
+			<!-- Login Form -->
+			<form th:action="@{/app/login}" method="post">
+				
+				<!-- Email -->
+				<div class="form-group">
+					<label class="form-label">Email</label>
+					<input type="email" name="email" class="form-input" required />
+				</div>
+
+				<!-- Password -->
+				<div class="form-group">
+					<label class="form-label">Password</label>
+					<input type="password" name="password" class="form-input" required />
+				</div>
+
+				<button type="submit" class="btn btn-primary">
+					Sign In
+				</button>
+			</form>
+
+			<!-- Footer -->
+			<div class="auth-footer">
+				Don't have an account?
+				<a th:href="@{/app/register}" class="auth-link">Register here</a>
+			</div>
+
 		</div>
-	</header>
-	<div class="container auth">
-		<h2>Login</h2><br>
-		<form th:action="@{/doLogin}" method="post">
-			<label>Email<input name="username" type="email" required /></label><br>
-			<label>Password<input name="password" type="password" required /></label><br>
-			<div><button class="btn" type="submit">Login</button></div><br>
-		</form>
-		<br><p>Don't have an account? <a th:href="@{/register}">Register</a></p>
 	</div>
+
 </body>
 
 </html>

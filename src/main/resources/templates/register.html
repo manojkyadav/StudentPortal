@@ -1,23 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="utf-8" />
-	<title>Register</title>
-	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<meta charset="UTF-8" />
+	<title>Student Registration</title>
+
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
-	<div class="container auth">
-		<h2>Register</h2><br>
-		<form th:action="@{/doRegister}" method="post">
-			<label>Name<input name="name" required /></label><br>
-			<label>Email<input name="email" type="email" required /></label><br>
-			<label>Password<input name="password" type="password" required /></label><br>
-			<label>Class ID<input name="classId" /></label><br>
-			<div><button class="btn" type="submit">Register</button></div>
-		</form>
+
+	<div class="auth-container">
+		<div class="auth-box">
+
+			<h1 class="auth-title">Student Registration</h1>
+			<p class="auth-subtitle">
+				Create your student account to access courses and exams
+			</p>
+
+			<!-- Registration Form -->
+			<form th:action="@{/app/register/student}" method="post" th:object="${createStudentRequest}">
+
+				<!-- Full Name -->
+				<div class="form-group">
+					<label class="form-label">Full Name</label>
+					<input type="text" th:field="*{name}" class="form-input" placeholder="Enter your full name"
+						required />
+				</div>
+
+				<!-- Email -->
+				<div class="form-group">
+					<label class="form-label">Email Address</label>
+					<input type="email" th:field="*{email}" class="form-input" placeholder="Enter your email"
+						required />
+				</div>
+
+				<!-- Password -->
+				<div class="form-group">
+					<label class="form-label">Password</label>
+					<input type="password" th:field="*{password}" class="form-input" placeholder="Create a password"
+						required />
+				</div>
+
+				<!-- Confirm Password -->
+				<div class="form-group">
+					<label class="form-label">Confirm Password</label>
+					<input type="password" th:field="*{confirmPassword}" class="form-input"
+						placeholder="Confirm your password" required />
+				</div>
+				<div class="form-group">
+					<label class="form-label">Class</label>
+					<select class="form-select" name="classRoomId" onchange="redirectToSubjects(this.value)">
+						<option value="">Select Class</option>
+						<option th:each="c : ${classRoomList}" th:value="${c.id}" th:text="${c.className}"
+							th:selected="${selectedClassId} == ${c.id}"></option>
+					</select>
+				</div>
+
+				<!-- Hidden Role (Student only) -->
+				<input type="hidden" name="role" value="STUDENT" />
+
+				<button type="submit" class="btn btn-primary btn-block">
+					Create Student Account
+				</button>
+			</form>
+
+			<!-- Footer -->
+			<div class="auth-footer">
+				Already have an account?
+				<a th:href="@{/app/login}" class="auth-link">Login here</a>
+			</div>
+
+		</div>
 	</div>
+
 </body>
 
 </html>

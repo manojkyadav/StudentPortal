@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Student Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+
+	<div class="dashboard-layout">
+
+		<!-- Sidebar -->
+		<aside class="sidebar">
+			<div class="sidebar-logo">LearnHub</div>
+
+			<ul class="sidebar-menu">
+				<li>
+					<a href="/app/student/dashboard" class="sidebar-link active">
+						<i data-feather="grid"></i> Dashboard
+					</a>
+				</li>
+				<li>
+					<a href="/app/student/topics" class="sidebar-link">
+						<i data-feather="bookmark"></i> Topics
+					</a>
+				</li>
+				<li>
+					<a href="/app/student/progress" class="sidebar-link">
+						<i data-feather="trending-up"></i> My Progress
+					</a>
+				</li>
+			</ul>
+
+			<div class="sidebar-footer">
+				<div class="user-info">
+					<div class="user-name" th:text="${session.USER_NAME}">User Name</div>
+					<div class="user-role" th:text="${session.USER_ROLE}">Role</div>
+				</div>
+				<form th:action="@{/app/logout}" method="post">
+					<button type="submit" class="btn btn-secondary btn-sm">
+						Logout
+					</button>
+				</form>
+			</div>
+		</aside>
+
+		<!-- Main Content -->
+		<main class="main-content">
+
+			<!-- Header -->
+			<div class="page-header">
+				<h1 class="page-title">Welcome, Pihu Yadav!</h1>
+				<p class="page-subtitle">Track your learning progress</p>
+			</div>
+
+			<!-- Stats -->
+			<div class="card-grid">
+
+				<div class="stat-card">
+					<div class="stat-icon" style="background:#e0e7ff;">
+						<i data-feather="check-circle" style="color:#667eea"></i>
+					</div>
+					<div class="stat-value" th:text="${stats.testsCompleted}"></div>
+					<div class="stat-label">Tests Completed</div>
+				</div>
+
+				<div class="stat-card">
+					<div class="stat-icon" style="background:#d1fae5;">
+						<i data-feather="percent" style="color:#38a169"></i>
+					</div>
+					<div class="stat-value"
+					     th:text="${#numbers.formatDecimal(stats.averageScore,1,2)} + '%'">
+					</div>
+					<div class="stat-label">Average Score</div>
+				</div>
+
+				<div class="stat-card">
+					<div class="stat-icon" style="background:#fff7ed;">
+						<i data-feather="book-open" style="color:#ed8936"></i>
+					</div>
+					<div class="stat-value" th:text="${stats.topicsStudied}"></div>
+					<div class="stat-label">Topics Studied</div>
+				</div>
+
+			</div>
+
+			<div th:each="tp : ${topicPerformance}" class="chart-container">
+			    <div class="chart-title" th:text="${tp.topicId}"></div>
+				<div style="margin-top:2rem;">
+
+			    <div style="margin-bottom:0.5rem; font-weight:600; overflow:hidden;">
+					<div style="background:#e2e8f0; border-radius:12px; overflow:hidden;">
+						<div style="
+						width:100%;
+						padding:0.75rem;
+						background:linear-gradient(135deg,#667eea,#764ba2);
+						color:white;
+						text-align:center;
+						font-weight:600;
+					                    ">
+			            Score:
+			            <span th:text="${#numbers.formatDecimal(tp.averageScore,1,2)}"></span>%
+			        </div>
+			    </div>
+				</div>
+				</div>
+			</div>
+
+			<!-- Recent Activity -->
+			<div class="table-container">
+				<div class="table-header">
+					<h2 class="table-title">Recent Activity</h2>
+				</div>
+
+				<table>
+					<thead>
+						<tr>
+							<th>Topic</th>
+							<th>Mode</th>
+							<th>Score</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr>
+							<td>Motion</td>
+							<td>
+								<span class="badge badge-info">Exam</span>
+							</td>
+							<td>
+								<span class="badge badge-success">100.0%</span>
+							</td>
+							<td>26/11/2025</td>
+						</tr>
+						<tr th:each="ra : ${recentActivities}">
+						    <td th:text="${ra.topicId}"></td>
+						    <td>
+						        <span class="badge badge-info"
+						              th:classappend="${ra.mode == 'EXAM'} ? 'badge-info' : 'badge-warning'"
+						              th:text="${ra.mode}">
+						        </span>
+						    </td>
+						    <td>
+						        <span class="badge badge-success"
+						              th:text="${#numbers.formatDecimal(ra.score,1,2)} + '%'">
+						        </span>
+						    </td>
+						    <td th:text="${#temporals.format(ra.completedAt,'dd/MM/yyyy')}"></td>
+						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+
+		</main>
+	</div>
+
+	<script>
+		feather.replace();
+	</script>
+
+</body>
+
+</html>

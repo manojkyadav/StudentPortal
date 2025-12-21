@@ -1,24 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title th:text="${title} ?: 'School App'">School App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <title th:text="${pageTitle}">Default Title</title>
 </head>
 <body>
-<div class="container mt-4">
-	
-    <!-- Flash messages -->
-    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <header>
+        <h1 th:text="${pageHeader}">Header</h1>
+        <h2 th:text="${pageSubTitle}">SubTitle</h2>
+    </header>
 
+    <div th:fragment="layout (pageTitle, pageHeader, pageSubTitle, contentFragment, activePage)">
+        <div th:insert="${contentFragment}"></div>
+    </div>
 
-
-</div>
-
-<div th:replace="fragments/footer :: footer"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <footer>
+        <p>Footer</p>
+    </footer>
 </body>
 </html>
