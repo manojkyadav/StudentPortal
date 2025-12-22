@@ -58,7 +58,7 @@
 			</div>
 
 			<!-- Topics List -->
-			<div class="card-grid">
+			<div th:each="topic : ${topicList}" class="card-grid">
 
 				<!-- Topic Card -->
 				<div class="topic-card">
@@ -67,30 +67,31 @@
 					</div>
 
 					<div class="topic-content">
-						<h3 class="topic-title">Motion</h3>
-
-						<div class="topic-meta">
-							<span>Physics</span>
-							<span>Mathematics</span>
-						</div>
-
-						<p class="topic-description">
-							Laws of motion
-						</p>
+						<h3 class="topic-title" th:text="${topic.topicName}">
+				            Topic Name
+				        </h3>
+						<!-- Topic Description -->
+				        <div class="topic-meta">
+				            <span th:text="${topic.description}">
+				                description
+				            </span>
+				        </div>
 
 						<div class="topic-actions">
-							<button class="btn btn-primary btn-sm"
-								onclick="openTestModal('Motion','Physics','Mathematics')">
+							<!-- PRACTICE -->
+							<button class="btn btn-primary btn-sm" th:data-topic="${topic.topicName}" th:data-subject="${topic.subject.subjectName}"
+								th:data-topic-id="${topic.id}" data-mode="PRACTICE" onclick="openTestModal(this)">
 								Practice
 							</button>
-							<button class="btn btn-outline btn-sm"
-								onclick="openTestModal('Motion','Physics','Mathematics','EXAM')">
+							<!-- EXAM -->
+							<button class="btn btn-outline btn-sm" th:data-topic="${topic.topicName}" th:data-subject="${topic.subject.subjectName}"
+								th:data-topic-id="${topic.id}" data-mode="EXAM" onclick="openTestModal(this)">
 								Exam
 							</button>
 						</div>
-
 					</div>
 				</div>
+			</div>
 
 				<!-- Repeat for more topics -->
 				<div class="topic-card">
@@ -130,16 +131,22 @@
 	<script>
 		feather.replace();
 
-		function openTestModal(topic, subject, clazz, defaultMode = 'PRACTICE') {
-			document.getElementById('modalTopic').innerText = topic;
-			document.getElementById('modalSubject').innerText = subject;
-			document.getElementById('modalClass').innerText = clazz;
+		function openTestModal(btn) {
 
-			document.querySelectorAll('input[name="mode"]').forEach(r => {
-				r.checked = (r.value === defaultMode);
-			});
+		    const topicName = btn.dataset.topic;
+		    const subjectName = btn.dataset.subject;
+		    const topicId = btn.dataset.topicId;
+		    const defaultMode = btn.dataset.mode || 'PRACTICE';
 
-			document.getElementById('testModal').style.display = 'flex';
+		    document.getElementById('modalTopic').innerText = topicName;
+		    document.getElementById('modalSubject').innerText = subjectName;
+		    document.getElementById('modalClass').innerText = topicId;
+
+		    document.querySelectorAll('input[name="mode"]').forEach(radio => {
+		        radio.checked = (radio.value === defaultMode);
+		    });
+
+		    document.getElementById('testModal').style.display = 'flex';
 		}
 
 		function closeTestModal() {
@@ -148,11 +155,11 @@
 
 		function startTest() {
 			const mode = document.querySelector('input[name="mode"]:checked').value;
-			const topic = document.getElementById('modalTopic').innerText;
+			const topic = document.getElementById('modalClass').innerText;
 
 			// Example redirect (adjust URL)
-			alert("mode:"+mode);
-			alert("topic:"+topic);
+			//alert("mode:"+mode);
+			//alert("topic:"+topic);
 			window.location.href =
 				`/app/student/practicequiz?topicId=${topic}&mode=${mode}`;
 		}

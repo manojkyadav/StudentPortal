@@ -25,8 +25,8 @@
 					</a>
 				</li>
 				<li>
-					<a href="/app/student/topics" class="sidebar-link">
-						<i data-feather="bookmark"></i> Topics
+					<a href="/app/student/subjects/classid/13" class="sidebar-link">
+						<i data-feather="bookmark"></i> Subjects
 					</a>
 				</li>
 				<li>
@@ -128,16 +128,6 @@
 					</thead>
 
 					<tbody>
-						<tr>
-							<td>Motion</td>
-							<td>
-								<span class="badge badge-info">Exam</span>
-							</td>
-							<td>
-								<span class="badge badge-success">100.0%</span>
-							</td>
-							<td>26/11/2025</td>
-						</tr>
 						<tr th:each="ra : ${recentActivities}">
 						    <td th:text="${ra.topicId}"></td>
 						    <td>

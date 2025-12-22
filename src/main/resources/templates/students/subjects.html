@@ -56,65 +56,38 @@
             </p>
         </div>
 
-        <!-- Topics List -->
+        <!-- Subject List -->
         <div class="card-grid">
 
-            <!-- Topic Card -->
-            <div class="topic-card">
-                <div class="topic-icon">
-                    <i data-feather="book"></i>
-                </div>
+			<!-- Subject Cards -->
+			<div th:each="subject : ${subjectList}" class="topic-card">
 
-                <div class="topic-content">
-                    <h3 class="topic-title">Motion</h3>
+			    <div class="topic-icon">
+			        <i data-feather="book"></i>
+			    </div>
 
-                    <div class="topic-meta">
-                        <span>Physics</span>
-                        <span>Mathematics</span>
-                    </div>
+			    <div class="topic-content">
+			        <!-- Subject Name -->
+			        <h3 class="topic-title" th:text="${subject.subjectName}">
+			            Subject Name
+			        </h3>
 
-                    <p class="topic-description">
-                        Laws of motion
-                    </p>
+			        <!-- Subject Description -->
+			        <div class="topic-meta">
+			            <span th:text="${subject.description}">
+			                description
+			            </span>
+			        </div>
 
-                    <div class="topic-actions">
-                        <a th:href="@{/student/practice/1}" class="btn btn-primary btn-sm">
-                            Practice
-                        </a>
-                        <a th:href="@{/student/exam/1}" class="btn btn-outline btn-sm">
-                            Exam
-                        </a>
-                    </div>
-                </div>
-            </div>
+			        <!-- Start Practice Button -->
+			        <a th:href="@{/app/student/topics/subjectId/{id}(id=${subject.id})}"
+			           class="btn btn-primary btn-sm"
+			           style="margin-top:0.75rem; display:inline-block;">
+			            Start Practice
+			        </a>
+			    </div>
 
-            <!-- Repeat for more topics -->
-            <div class="topic-card">
-                <div class="topic-icon">
-                    <i data-feather="book"></i>
-                </div>
-
-                <div class="topic-content">
-                    <h3 class="topic-title">Force</h3>
-
-                    <div class="topic-meta">
-                        <span>Physics</span>
-                    </div>
-
-                    <p class="topic-description">
-                        Types of forces
-                    </p>
-
-                    <div class="topic-actions">
-                        <a th:href="@{/student/practice/2}" class="btn btn-primary btn-sm">
-                            Practice
-                        </a>
-                        <a th:href="@{/student/exam/2}" class="btn btn-outline btn-sm">
-                            Exam
-                        </a>
-                    </div>
-                </div>
-            </div>
+			</div>
 
         </div>
 

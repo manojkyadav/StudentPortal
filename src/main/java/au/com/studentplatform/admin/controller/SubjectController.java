@@ -42,6 +42,17 @@ public class SubjectController {
 
 		return subjectService.getSubjectsByClassId(classId);
 	}
+	@GetMapping("/student/subjects/classid/{classId}")
+	//@ResponseBody
+	public String getSubjectsByClassId(@PathVariable Integer classId, Model model) {
+		// model.addAttribute("subjectList",
+		// subjectService.getSubjectsByClassId(classId));
+
+		List<Subject>  subjects = subjectService.getSubjectsByClassId(classId);
+		model.addAttribute("subjectList",subjects);
+		
+		return "students/subjects";
+	}
 
 	@GetMapping("/admin/subjects")
 	public String subjectsList(Model model) {

@@ -87,7 +87,20 @@ public class TopicController {
 	@GetMapping("/student/topics")
 	public String studentTopics(Model model) {
 		model.addAttribute("topics", topicService.findAll());
+		
 		return "students/topics";
 	}
+	
+	@GetMapping("/student/topics/subjectId/{subjectId}")
+	//@ResponseBody
+	public String getSubjectTopicById(@PathVariable Integer subjectId, Model model) {
+			//model.addAttribute("topicList", topicService.getTopicBySubjectId(subjectId));
+			List<Topic> topics =  topicService.getTopicBySubjectId(subjectId);
+			
+			model.addAttribute("topicList", topics);
+		
+		return "students/topics";
+	}
+	
 
 }
