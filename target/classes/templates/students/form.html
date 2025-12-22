@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="content">
+  <div th:replace="~{fragments/header :: header}"></div>
+
+  <h2 th:text="${student.id != null ? 'Edit Student' : 'New Student'}"></h2>
+
+  <form th:action="@{/app/students/save}" th:object="${student}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <!-- Name -->
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input class="form-control" type="text" th:field="*{name}" placeholder="Enter full name" required />
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input class="form-control" type="email" th:field="*{email}" placeholder="Enter email address" required />
+    </div>
+
+    <!-- Password (only for new student) -->
+    <div class="mb-3" th:if="${student.id == null}">
+      <label class="form-label">Password</label>
+      <input class="form-control" type="password" th:field="*{passwordHash}" placeholder="Enter password" required />
+      <small class="text-muted">Password will be securely hashed before saving.</small>
+    </div>
+	<div class="mb-3" th:if="${student.id != null}">
+	      <input class="form-control" type="hidden" th:field="*{passwordHash}" placeholder="Enter password" required />
+	    </div>
+
+    <!-- Class selection -->
+    <div class="mb-3">
+      <label class="form-label">Classroom</label>
+      <select class="form-select" th:field="*{classRoom}" required>
+        <option value="">Select a Class</option>
+        <option th:each="c : ${classroomList}" th:value="${c.id}" th:text="${c.className}"></option>
+      </select>
+    </div>
+
+    <!-- Role -->
+    <div class="mb-3">
+      <label class="form-label">Role</label>
+      <select class="form-select" th:field="*{role}" required>
+        <option value="">Select Role</option>
+        <option value="STUDENT">STUDENT</option>
+        <option value="TEACHER">TEACHER</option>
+        <option value="ADMIN">ADMIN</option>
+      </select>
+    </div>
+
+    <!-- Status -->
+    <div class="mb-3">
+      <label class="form-label">Status</label>
+      <select class="form-select" th:field="*{status}" required>
+        <option value="ACTIVE">ACTIVE</option>
+        <option value="INACTIVE">INACTIVE</option>
+        <option value="DELETED">DELETED</option>
+      </select>
+    </div>
+
+    <!-- Created At (Read-only when editing) -->
+    <div class="mb-3" th:if="${student.createdAt != null}">
+      <label class="form-label">Created At</label>
+      <input type="text" class="form-control" 
+             th:value="${#temporals.format(student.createdAt, 'yyyy-MM-dd HH:mm')}" readonly />
+    </div>
+
+    <!-- Last Login (Read-only if available) -->
+    <div class="mb-3" th:if="${student.lastLogin != null}">
+      <label class="form-label">Last Login</label>
+      <input type="text" class="form-control" 
+             th:value="${#temporals.format(student.lastLogin, 'yyyy-MM-dd HH:mm')}" readonly />
+    </div>
+
+    <div class="mt-4">
+      <button class="btn btn-primary" type="submit">Save</button>
+      <a class="btn btn-secondary" th:href="@{/app/students}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<!-- Layout render -->
+<div th:replace="~{layout :: layout(~{::content})}"></div>
+</html>

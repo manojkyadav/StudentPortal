@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Test Results</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">LearnHub</div>
+
+        <ul class="sidebar-menu">
+            <li><a class="sidebar-link active" href="#">Dashboard</a></li>
+            <li><a class="sidebar-link" href="#">Topics</a></li>
+            <li><a class="sidebar-link" href="#">My Progress</a></li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-name" th:text="${studentName}"></div>
+                <div class="user-role">Student</div>
+            </div>
+            <button class="btn btn-secondary btn-sm">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <div class="page-header">
+            <h1 class="page-title">Test Results</h1>
+            <p class="page-subtitle">Review your answers and learn from explanations</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="card-grid">
+
+            <div class="stat-card">
+                <div class="stat-value" th:text="${score + '%'}"></div>
+                <div class="stat-label">Your Score</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" style="color:#48bb78"
+                     th:text="${correctCount}"></div>
+                <div class="stat-label">Correct Answers</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" style="color:#f56565"
+                     th:text="${incorrectCount}"></div>
+                <div class="stat-label">Incorrect Answers</div>
+            </div>
+
+        </div>
+
+        <!-- Back Button -->
+        <div style="margin-bottom:2rem;">
+            <a href="/app/student/dashboard"
+               class="btn btn-primary"
+               style="width:100%; text-align:center;">
+                ← Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Detailed Results -->
+		<div class="question-card">
+		    <h2 class="question-header">Detailed Results</h2>
+
+		    <div th:each="res, stat : ${results}" style="margin-top:2rem;">
+
+		        <h3>Question [[${stat.index + 1}]]</h3>
+
+		        <p th:text="${res.questionText}"></p>
+
+		        <div th:classappend="${res.correct} ? 'option-item correct' : 'option-item incorrect'">
+		            Your Answer:
+		            <strong th:text="${res.userAnswer}"></strong>
+		            <span th:if="${res.correct}"> ✔</span>
+		            <span th:unless="${res.correct}"> ✘</span>
+		        </div>
+
+		        <div style="margin-top:0.75rem;">
+		            <strong>Correct Answer:</strong>
+		            <span style="color:#48bb78;" th:text="${res.correctAnswer}"></span>
+		        </div>
+
+		        <div style="margin-top:1rem; border-left:5px solid #667eea;
+		                    padding:1rem; background:#f9fbff; border-radius:12px;">
+		            <strong>Explanation:</strong>
+		            <p th:text="${res.explanation}"></p>
+		        </div>
+
+		    </div>
+		</div>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Define the content fragment inside the template -->
+<div th:fragment="content">
+	<div th:replace="~{fragments/header :: header}"></div>
+	<h4 class="mb-3">Student Login</h4>
+	<form th:action="@{/api/login}" method="post" th:object="${loginRequest}">
+		<div class="mb-3">
+			<label class="form-label">Email</label>
+			<input class="form-control" type="email" th:field="*{email}" required />
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Password</label>
+			<input class="form-control" type="password" th:field="*{password}" required />
+		</div>
+		<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+		<button class="btn btn-primary">Login</button>
+	</form>
+</div>
+</div>
+
+<!-- Render the layout -->
+<div th:replace="~{layout :: layout(~{::content})}"></div>
+
+</html>

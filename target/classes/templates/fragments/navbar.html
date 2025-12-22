@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="navbar">
+    <nav style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        background:#2d3748;
+        padding:15px;
+        color:white;
+    ">
+        <div style="font-size:20px; font-weight:bold;">Admin Portal</div>
+
+        <div>
+            <span th:text="${userName}">Admin</span>
+            |
+            <a href="/logout" style="color:white; text-decoration:none; margin-left:8px;">
+                Logout
+            </a>
+        </div>
+    </nav>
+</div>
+
+</body>
+</html>

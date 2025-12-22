@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="content">
+  <div th:replace="fragments/header :: header"></div>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Students</h2>
+    <a class="btn btn-success" th:href="@{/app/students/new}">
+      + New Student
+    </a>
+  </div>
+
+  <table class="table table-bordered table-hover align-middle shadow-sm">
+    <thead class="table-primary text-center">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Class</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Last Login</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="s : ${students}">
+        <td th:text="${s.id}" class="text-center"></td>
+        <td th:text="${s.name}"></td>
+        <td th:text="${s.email}"></td>
+        <td th:text="${s.classRoom != null ? s.classRoom.className : '—'}"></td>
+        <td th:text="${s.role}"></td>
+        <td>
+          <span th:text="${s.status}">
+          </span>
+        </td>
+        <td th:text="${s.createdAt != null ? #temporals.format(s.createdAt, 'yyyy-MM-dd HH:mm') : '—'}" class="text-center"></td>
+        <td th:text="${s.lastLogin != null ? #temporals.format(s.lastLogin, 'yyyy-MM-dd HH:mm') : '—'}" class="text-center"></td>
+        <td class="text-center">
+          <a th:href="@{|/app/students/edit/${s.id}|}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+          <a th:href="@{|/app/students/delete/${s.id}|}" 
+             class="btn btn-sm btn-outline-danger"
+             onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(students)}">
+        <td colspan="9" class="text-center text-muted py-3">No students found.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Layout render -->
+<div th:replace="~{layout :: layout(~{::content})}"></div>
+</html>

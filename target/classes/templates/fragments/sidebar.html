@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar(activePage)">
+    <div class="sidebar">
+        <div class="sidebar-logo">AdminPanel</div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a th:href="@{/admin/dashboard}" th:classappend="${activePage=='dashboard'} ? 'active' : ''" class="sidebar-link">
+                    <i data-feather="home"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/users}" th:classappend="${activePage=='users'} ? 'active' : ''" class="sidebar-link">
+                    <i data-feather="users"></i> Users
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/reports}" th:classappend="${activePage=='reports'} ? 'active' : ''" class="sidebar-link">
+                    <i data-feather="bar-chart-2"></i> Reports
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-name">Admin User</div>
+                <div class="user-role">Administrator</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

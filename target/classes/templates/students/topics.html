@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Select a Topic</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Common CSS -->
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+
+	<div class="dashboard-layout">
+
+		<!-- Sidebar -->
+		<aside class="sidebar">
+			<div class="sidebar-logo">LearnHub</div>
+
+			<ul class="sidebar-menu">
+				<li>
+					<a th:href="@{/app/student/dashboard}" class="sidebar-link">
+						<i data-feather="grid"></i> Dashboard
+					</a>
+				</li>
+				<li>
+					<a th:href="@{/app/student/topics}" class="sidebar-link active">
+						<i data-feather="book-open"></i> Topics
+					</a>
+				</li>
+				<li>
+					<a th:href="@{/app/student/progress}" class="sidebar-link">
+						<i data-feather="award"></i> My Progress
+					</a>
+				</li>
+			</ul>
+
+			<div class="sidebar-footer">
+				<div class="user-info">
+					<div class="user-name" th:text="${studentName}">Pihu Yadav</div>
+					<div class="user-role">Student</div>
+				</div>
+				<a th:href="@{/logout}" class="btn btn-secondary btn-sm">Logout</a>
+			</div>
+		</aside>
+
+		<!-- Main Content -->
+		<main class="main-content">
+
+			<!-- Header -->
+			<div class="page-header">
+				<h1 class="page-title">Select a Topic</h1>
+				<p class="page-subtitle">
+					Choose a topic to start practicing or take an exam
+				</p>
+			</div>
+
+			<!-- Topics List -->
+			<div th:each="topic : ${topicList}" class="card-grid">
+
+				<!-- Topic Card -->
+				<div class="topic-card">
+					<div class="topic-icon">
+						<i data-feather="book"></i>
+					</div>
+
+					<div class="topic-content">
+						<h3 class="topic-title" th:text="${topic.topicName}">
+				            Topic Name
+				        </h3>
+						<!-- Topic Description -->
+				        <div class="topic-meta">
+				            <span th:text="${topic.description}">
+				                description
+				            </span>
+				        </div>
+
+						<div class="topic-actions">
+							<!-- PRACTICE -->
+							<button class="btn btn-primary btn-sm" th:data-topic="${topic.topicName}" th:data-subject="${topic.subject.subjectName}"
+								th:data-topic-id="${topic.id}" data-mode="PRACTICE" onclick="openTestModal(this)">
+								Practice
+							</button>
+							<!-- EXAM -->
+							<button class="btn btn-outline btn-sm" th:data-topic="${topic.topicName}" th:data-subject="${topic.subject.subjectName}"
+								th:data-topic-id="${topic.id}" data-mode="EXAM" onclick="openTestModal(this)">
+								Exam
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+				<!-- Repeat for more topics -->
+				<div class="topic-card">
+					<div class="topic-icon">
+						<i data-feather="book"></i>
+					</div>
+
+					<div class="topic-content">
+						<h3 class="topic-title">Force</h3>
+
+						<div class="topic-meta">
+							<span>Physics</span>
+						</div>
+
+						<p class="topic-description">
+							Types of forces
+						</p>
+
+
+						<div class="topic-actions">
+							<button class="btn btn-primary btn-sm"
+								onclick="openTestModal('Motion','Physics','Type of forces')">
+								Practice
+							</button>
+							<button class="btn btn-outline btn-sm"
+								onclick="openTestModal('Motion','Physics','Type of forces','EXAM')">
+								Exam
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</main>
+	</div>
+	<script>
+		feather.replace();
+
+		function openTestModal(btn) {
+
+		    const topicName = btn.dataset.topic;
+		    const subjectName = btn.dataset.subject;
+		    const topicId = btn.dataset.topicId;
+		    const defaultMode = btn.dataset.mode || 'PRACTICE';
+
+		    document.getElementById('modalTopic').innerText = topicName;
+		    document.getElementById('modalSubject').innerText = subjectName;
+		    document.getElementById('modalClass').innerText = topicId;
+
+		    document.querySelectorAll('input[name="mode"]').forEach(radio => {
+		        radio.checked = (radio.value === defaultMode);
+		    });
+
+		    document.getElementById('testModal').style.display = 'flex';
+		}
+
+		function closeTestModal() {
+			document.getElementById('testModal').style.display = 'none';
+		}
+
+		function startTest() {
+			const mode = document.querySelector('input[name="mode"]:checked').value;
+			const topic = document.getElementById('modalClass').innerText;
+
+			// Example redirect (adjust URL)
+			//alert("mode:"+mode);
+			//alert("topic:"+topic);
+			window.location.href =
+				`/app/student/practicequiz?topicId=${topic}&mode=${mode}`;
+		}
+	</script>
+
+
+	<!-- Test Start Modal -->
+	<div id="testModal" class="modal-overlay" style="display:none;">
+		<div class="modal-card">
+
+			<h2 class="modal-title">
+				Start Test: <span id="modalTopic">Motion</span>
+			</h2>
+
+			<div class="modal-info">
+				<p><strong>Subject:</strong> <span id="modalSubject">Physics</span></p>
+				<p><strong>Class:</strong> <span id="modalClass">Mathematics</span></p>
+			</div>
+
+			<div class="modal-section">
+				<label class="form-label">Select Mode</label>
+
+				<div class="radio-group">
+					<label>
+						<input type="radio" name="mode" value="PRACTICE" checked>
+						Practice Mode
+					</label>
+
+					<label>
+						<input type="radio" name="mode" value="EXAM">
+						Exam Mode
+					</label>
+				</div>
+
+				<p class="modal-hint">
+					Practice mode: Answer questions at your own pace
+				</p>
+			</div>
+
+			<div class="modal-actions">
+				<button class="btn btn-secondary" onclick="closeTestModal()">
+					Cancel
+				</button>
+
+				<button class="btn btn-success" onclick="startTest()">
+					▶ Start Test
+				</button>
+			</div>
+
+		</div>
+	</div>
+
+
+</body>
+
+</html>

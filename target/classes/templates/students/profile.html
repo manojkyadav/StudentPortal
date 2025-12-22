@@ -1,0 +1,21 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<title>Profile</title>
+</head>
+
+<body class="bg-light">
+	<div class="container py-4">
+		<div class="card p-4">
+			<h4>Profile</h4>
+			<p><strong>Name:</strong> <span th:text="${student.name}"></span></p>
+			<p><strong>Email:</strong> <span th:text="${student.email}"></span></p>
+			<p><strong>Class:</strong> <span th:text="${student.classRoom.className}"></span></p>
+			<a class="btn btn-outline-secondary" th:href="@{/student/dashboard}">Back</a>
+		</div>
+	</div>
+</body>
+
+</html>
