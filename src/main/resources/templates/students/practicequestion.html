@@ -11,23 +11,7 @@
 	<div class="dashboard-layout">
 
 		<!-- Sidebar -->
-		<aside class="sidebar">
-			<div class="sidebar-logo">LearnHub</div>
-
-			<ul class="sidebar-menu">
-				<li><a class="sidebar-link active" href="#">Dashboard</a></li>
-				<li><a class="sidebar-link" href="#">Topics</a></li>
-				<li><a class="sidebar-link" href="#">My Progress</a></li>
-			</ul>
-
-			<div class="sidebar-footer">
-				<div class="user-info">
-					<div class="user-name" th:text="${studentName}"></div>
-					<div class="user-role">Student</div>
-				</div>
-				<button class="btn btn-secondary btn-sm">Logout</button>
-			</div>
-		</aside>
+		 <div th:replace="fragments/sidebar :: sidebarFragment"></div>
 
 		<!-- Main Content -->
 		<main class="main-content">

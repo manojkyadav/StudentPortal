@@ -1,6 +1,7 @@
 package au.com.studentplatform.admin.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -59,8 +60,14 @@ public class QuestionService {
 	
 	@Transactional
 	public Question getQuestionWithOptions(Integer id) {
-	    return questionRepository.findByIdWithOptions(id)
-	            .orElseThrow();
+		Optional<Question>  questions = questionRepository.findByIdWithOptions(id);
+		if (questions.get() == null) {
+			Question question = new Question();
+			return question;
+		}
+		
+		return questions.get();
+	    //return questionRepository.findByIdWithOptions(id).orElseThrow();
 	}
 
 }

@@ -4,19 +4,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import au.com.studentplatform.admin.common.GenericQuestionGenerator;
 import au.com.studentplatform.admin.model.ClassRoom;
 import au.com.studentplatform.admin.model.Option;
 import au.com.studentplatform.admin.model.Question;
@@ -33,12 +29,14 @@ public class QuestionController {
 	private final SubjectService subjectService;
 	private final TopicService topicService;
 	private final QuestionService questionService;
+	private final GenericQuestionGenerator genericQuestionGenerator;
 
-	public QuestionController(QuestionService questionService,ClassRoomService classroomService, SubjectService subjectService, TopicService topicService) {
+	public QuestionController(QuestionService questionService,ClassRoomService classroomService, SubjectService subjectService, TopicService topicService, GenericQuestionGenerator genericQuestionGenerator) {
 		this.topicService = topicService;
 		this.classroomService = classroomService;
 		this.subjectService = subjectService;
 		this.questionService = questionService;
+		this.genericQuestionGenerator = genericQuestionGenerator;
 	}
 
 	// ---------- QUESTIONS ----------
@@ -130,4 +128,23 @@ public class QuestionController {
 			ra.addFlashAttribute("success", "Question deleted");
 			return "redirect:/app/adminquestions";
 		}
+		
+		@GetMapping("/admin/questions/genericQuestionGenerator")
+		public String GenericQuestionGenerator(@RequestParam  int classId,
+				@RequestParam  int subjectId,
+				@RequestParam  String topicName,
+				@RequestParam  int totalQuestions,
+				@RequestParam  int batchSize) {
+			
+			try {
+				genericQuestionGenerator.generateQuestions(classId, subjectId, topicName, totalQuestions, batchSize);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			return "success";
+		}
+		
 }

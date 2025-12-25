@@ -57,10 +57,10 @@ public class QuizController {
 		session.setAttribute("questionIds", questionIds);
 		session.setAttribute("currentIndex", 0);
 
-		return loadQuestion(model, questionIds, 0);// "students/practicequestion";
+		return loadQuestion(model, questionIds, 0, session);// "students/practicequestion";
 	}
 
-	private String loadQuestion(Model model, List<Integer> questionIds, int index) {
+	private String loadQuestion(Model model, List<Integer> questionIds, int index, HttpSession session) {
 
 		Question question = questionService.getQuestionWithOptions(questionIds.get(index));
 
@@ -71,6 +71,9 @@ public class QuizController {
 		model.addAttribute("question", question.getQuestionTxt());
 		model.addAttribute("questionId", question.getId());
 		model.addAttribute("options", question.getOptions());
+		
+		model.addAttribute("studentName",  (String) session.getAttribute("USER_NAME"));
+	    model.addAttribute("activePage", "subjects");
 
 		return "students/practicequestion";
 	}
@@ -195,7 +198,7 @@ public class QuizController {
 	        return "redirect:/app/student/practicequizresult";
 	    }
 
-	    return loadQuestion(model, questionIds, currentIndex);
+	    return loadQuestion(model, questionIds, currentIndex, session);
 	}
 
 }

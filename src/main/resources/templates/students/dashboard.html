@@ -15,46 +15,14 @@
 	<div class="dashboard-layout">
 
 		<!-- Sidebar -->
-		<aside class="sidebar">
-			<div class="sidebar-logo">LearnHub</div>
-
-			<ul class="sidebar-menu">
-				<li>
-					<a href="/app/student/dashboard" class="sidebar-link active">
-						<i data-feather="grid"></i> Dashboard
-					</a>
-				</li>
-				<li>
-					<a href="/app/student/subjects/classid/13" class="sidebar-link">
-						<i data-feather="bookmark"></i> Subjects
-					</a>
-				</li>
-				<li>
-					<a href="/app/student/progress" class="sidebar-link">
-						<i data-feather="trending-up"></i> My Progress
-					</a>
-				</li>
-			</ul>
-
-			<div class="sidebar-footer">
-				<div class="user-info">
-					<div class="user-name" th:text="${session.USER_NAME}">User Name</div>
-					<div class="user-role" th:text="${session.USER_ROLE}">Role</div>
-				</div>
-				<form th:action="@{/app/logout}" method="post">
-					<button type="submit" class="btn btn-secondary btn-sm">
-						Logout
-					</button>
-				</form>
-			</div>
-		</aside>
+		<div th:replace="fragments/sidebar :: sidebarFragment"></div>
 
 		<!-- Main Content -->
 		<main class="main-content">
 
 			<!-- Header -->
 			<div class="page-header">
-				<h1 class="page-title">Welcome, Pihu Yadav!</h1>
+				<h1 class="page-title">Welcome, <span th:text="${session.USER_NAME}">User Name</span>!</h1>
 				<p class="page-subtitle">Track your learning progress</p>
 			</div>
 
@@ -73,8 +41,7 @@
 					<div class="stat-icon" style="background:#d1fae5;">
 						<i data-feather="percent" style="color:#38a169"></i>
 					</div>
-					<div class="stat-value"
-					     th:text="${#numbers.formatDecimal(stats.averageScore,1,2)} + '%'">
+					<div class="stat-value" th:text="${#numbers.formatDecimal(stats.averageScore,1,2)} + '%'">
 					</div>
 					<div class="stat-label">Average Score</div>
 				</div>
@@ -89,27 +56,68 @@
 
 			</div>
 
-			<div th:each="tp : ${topicPerformance}" class="chart-container">
-			    <div class="chart-title" th:text="${tp.topicId}"></div>
-				<div style="margin-top:2rem;">
+			<!--div th:each="tp : ${topicPerformance}" class="chart-container">
+						    <div class="chart-title" th:text="${tp.topicName}"></div>
+							<div style="margin-top:2rem;">
 
-			    <div style="margin-bottom:0.5rem; font-weight:600; overflow:hidden;">
-					<div style="background:#e2e8f0; border-radius:12px; overflow:hidden;">
-						<div style="
-						width:100%;
-						padding:0.75rem;
-						background:linear-gradient(135deg,#667eea,#764ba2);
-						color:white;
-						text-align:center;
-						font-weight:600;
-					                    ">
-			            Score:
-			            <span th:text="${#numbers.formatDecimal(tp.averageScore,1,2)}"></span>%
-			        </div>
-			    </div>
+						    <div style="margin-bottom:0.5rem; font-weight:600; overflow:hidden;">
+								<div style="background:#e2e8f0; border-radius:12px; overflow:hidden;">
+									<div style="
+									width:100%;
+									padding:0.75rem;
+									background:linear-gradient(135deg,#667eea,#764ba2);
+									color:white;
+									text-align:center;
+									font-weight:600;
+								                    ">
+						            Score:
+						            <span th:text="${#numbers.formatDecimal(tp.averageScore,1,2)}"></span>%
+						        </div>
+						    </div>
+							</div>
+							</div>
+						</div-->
+			<div class="chart-container professional-chart">
+				<div class="chart-header">
+					<h2 class="chart-title">Topic Performance</h2>
+					<span class="chart-subtitle">Average score (%)</span>
 				</div>
+
+				<div class="chart-area">
+					<!-- Y-axis labels -->
+					<div class="y-axis">
+						<span>100</span>
+						<span>75</span>
+						<span>50</span>
+						<span>25</span>
+						<span>0</span>
+					</div>
+
+					<!-- Bars -->
+					<div class="bars">
+						<div th:each="tp : ${topicPerformance}" class="bar-group">
+
+							<div class="bar-container">
+								<div class="bar" th:style="'height:' + ${tp.averageScore} + '%'">
+
+									<span class="bar-topic"
+										th:text="${tp.topicName.length() > 20} ? ${tp.topicName.substring(0,20)} + '…' : ${tp.topicName}">
+									</span>
+
+									<span class="bar-value"
+										th:text="${#numbers.formatDecimal(tp.averageScore,0,0)} + '%'">
+									</span>
+								</div>
+							</div>
+
+							<!--div class="bar-label"
+						                     th:text="${tp.topicName}">
+						                </div-->
+						</div>
+					</div>
 				</div>
 			</div>
+
 
 			<!-- Recent Activity -->
 			<div class="table-container">
@@ -129,21 +137,21 @@
 
 					<tbody>
 						<tr th:each="ra : ${recentActivities}">
-						    <td th:text="${ra.topicId}"></td>
-						    <td>
-						        <span class="badge badge-info"
-						              th:classappend="${ra.mode == 'EXAM'} ? 'badge-info' : 'badge-warning'"
-						              th:text="${ra.mode}">
-						        </span>
-						    </td>
-						    <td>
-						        <span class="badge badge-success"
-						              th:text="${#numbers.formatDecimal(ra.score,1,2)} + '%'">
-						        </span>
-						    </td>
-						    <td th:text="${#temporals.format(ra.completedAt,'dd/MM/yyyy')}"></td>
+							<td th:text="${ra.topicName}"></td>
+							<td>
+								<span class="badge badge-info"
+									th:classappend="${ra.mode == 'EXAM'} ? 'badge-info' : 'badge-warning'"
+									th:text="${ra.mode}">
+								</span>
+							</td>
+							<td>
+								<span class="badge badge-success"
+									th:text="${#numbers.formatDecimal(ra.score,1,2)} + '%'">
+								</span>
+							</td>
+							<td th:text="${#temporals.format(ra.completedAt,'dd/MM/yyyy')}"></td>
 						</tr>
-						
+
 					</tbody>
 				</table>
 			</div>

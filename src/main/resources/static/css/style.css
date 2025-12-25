@@ -728,4 +728,175 @@ tbody tr:hover {
     color: white;
     border: none;
 }
+.vertical-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem;
+  padding-top: 2rem;
+  height: 300px;
+}
+
+.bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70px;
+}
+
+.bar-wrapper {
+  height: 200px;
+  width: 100%;
+  background: #e2e8f0;
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.bar-fill-vertical {
+  width: 100%;
+  background: linear-gradient(180deg, #667eea, #764ba2);
+  border-radius: 12px 12px 0 0;
+  transition: height 0.6s ease;
+}
+
+.bar-percent {
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.bar-label {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  max-width: 70px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Professional Chart Container */
+.professional-chart {
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+.chart-header {
+  margin-bottom: 1.5rem;
+}
+
+.chart-subtitle {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+/* Chart Layout */
+.chart-area {
+  display: flex;
+  height: 320px;
+}
+
+/* Y Axis */
+.y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #a0aec0;
+  padding-right: 0rem;
+}
+
+/* Bars Area */
+.bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 0rem;
+  position: relative;
+  border-left: 1px solid #edf2f7;
+  border-bottom: 1px solid #edf2f7;
+}
+
+/* Individual Bar Group */
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
+}
+
+/* Bar Container */
+.bar-container {
+  height: 240px;
+  width: 40%;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Bar */
+.bar {
+  width: 100%;
+  background: linear-gradient(180deg, #4c6ef5, #364fc7);
+  border-radius: 12px 12px 6px 6px;
+  position: relative;
+  box-shadow: inset 0 -6px 12px rgba(255,255,255,0.2);
+  transition: height 0.6s ease;
+}
+
+/* Topic name inside vertical bar */
+.bar-topic {
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  transform-origin: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
+/* Topic name inside vertical bar, starting from bar base */
+.bar-topic {
+  position: absolute;
+  bottom: 0; /* start at the bottom of the bar */
+  left: 2; /* align with left edge of the bar */
+  transform: rotate(-90deg) translateX(0); /* rotate text to vertical */
+  transform-origin: center left; /* rotate from bottom-left corner */
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
+
+/* Adjust value position */
+.bar-value {
+  position: absolute;
+  top: -24px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+
+/* Labels */
+.bar-label {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  color: #2d3748;
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 

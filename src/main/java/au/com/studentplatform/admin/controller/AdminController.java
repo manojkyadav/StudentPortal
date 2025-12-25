@@ -58,25 +58,19 @@ public class AdminController {
 
 	@GetMapping("/student/dashboard")
 	public String studentDashboard(Model model, HttpSession session) {
-		/*
-		 * model.addAttribute("active", "dashboard");
-		 * 
-		 * model.addAttribute("stats", Map.of("classes", 2, "subjects", 5, "topics", 12,
-		 * "tests", 4));
-		 * 
-		 * model.addAttribute("totalUsers", 150); model.addAttribute("activeCourses",
-		 * 12); model.addAttribute("pendingTasks", 7);
-		 * 
-		 * session.setAttribute("userName", "Manoj Yadav"); session.setAttribute("role",
-		 * "Admin");
-		 */
+		
 		String email = (String) session.getAttribute("USER_EMAIL");
+		String name = (String) session.getAttribute("USER_NAME");
 
 		DashboardStatsDTO stats = dashboardService.getStats(email);
 
 		model.addAttribute("stats", stats);
 		model.addAttribute("topicPerformance", dashboardService.getTopicPerformance(email));
 		model.addAttribute("recentActivities", dashboardService.getRecentActivities(email));
+		
+		model.addAttribute("studentName",  (String) session.getAttribute("USER_NAME"));
+	    model.addAttribute("activePage", "dashboard");
+	    
 
 		return "students/dashboard";
 	}

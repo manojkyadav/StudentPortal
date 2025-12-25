@@ -54,12 +54,13 @@ public interface TestSessionRepository extends JpaRepository<TestSession, Intege
 	 */
 	@Query("""
 			    SELECT new au.com.studentplatform.admin.model.dto.TopicPerformanceDTO(
-			        t.topicId,
+			        t.topicId, topic.topicName,
 			        AVG((t.obtainedMarks * 100.0) / t.totalMarks)
 			    )
-			    FROM TestSession t
+			    FROM TestSession t, Topic topic
 			    WHERE t.email = :email
 			      AND t.status = au.com.studentplatform.admin.model.TestStatus.SUBMITTED
+			      AND t.topicId = topic.id
 			    GROUP BY t.topicId
 			""")
 	List<TopicPerformanceDTO> topicPerformance(@Param("email") String email);
@@ -70,14 +71,15 @@ public interface TestSessionRepository extends JpaRepository<TestSession, Intege
 	 */
 	@Query("""
 			    SELECT new au.com.studentplatform.admin.model.dto.RecentActivityDTO(
-			        t.topicId,
+			        t.topicId, topic.topicName,
 			        t.mode,
 			        (t.obtainedMarks * 100.0) / t.totalMarks,
 			        t.endTime
 			    )
-			    FROM TestSession t
+			    FROM TestSession t, Topic topic
 			    WHERE t.email = :email
 			      AND t.status = au.com.studentplatform.admin.model.TestStatus.SUBMITTED
+			       AND t.topicId = topic.id
 			    ORDER BY t.endTime DESC
 			""")
 	List<RecentActivityDTO> recentActivities(@Param("email") String email, Pageable pageable);

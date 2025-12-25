@@ -16,35 +16,7 @@
 	<div class="dashboard-layout">
 
 		<!-- Sidebar -->
-		<aside class="sidebar">
-			<div class="sidebar-logo">LearnHub</div>
-
-			<ul class="sidebar-menu">
-				<li>
-					<a th:href="@{/app/student/dashboard}" class="sidebar-link">
-						<i data-feather="grid"></i> Dashboard
-					</a>
-				</li>
-				<li>
-					<a th:href="@{/app/student/topics}" class="sidebar-link active">
-						<i data-feather="book-open"></i> Topics
-					</a>
-				</li>
-				<li>
-					<a th:href="@{/app/student/progress}" class="sidebar-link">
-						<i data-feather="award"></i> My Progress
-					</a>
-				</li>
-			</ul>
-
-			<div class="sidebar-footer">
-				<div class="user-info">
-					<div class="user-name" th:text="${studentName}">Pihu Yadav</div>
-					<div class="user-role">Student</div>
-				</div>
-				<a th:href="@{/logout}" class="btn btn-secondary btn-sm">Logout</a>
-			</div>
-		</aside>
+		<div th:replace="fragments/sidebar :: sidebarFragment"></div>
 
 		<!-- Main Content -->
 		<main class="main-content">
@@ -58,10 +30,10 @@
 			</div>
 
 			<!-- Topics List -->
-			<div th:each="topic : ${topicList}" class="card-grid">
+			<div class="card-grid">
 
 				<!-- Topic Card -->
-				<div class="topic-card">
+				<div class="topic-card" th:each="topic : ${topicList}" >
 					<div class="topic-icon">
 						<i data-feather="book"></i>
 					</div>
@@ -71,11 +43,11 @@
 				            Topic Name
 				        </h3>
 						<!-- Topic Description -->
-				        <div class="topic-meta">
-				            <span th:text="${topic.description}">
-				                description
-				            </span>
-				        </div>
+						<div class="topic-meta">
+						    <span th:text="${topic.description}">
+						        description
+						    </span>
+						</div>
 
 						<div class="topic-actions">
 							<!-- PRACTICE -->

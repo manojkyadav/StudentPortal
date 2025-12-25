@@ -18,6 +18,7 @@ import au.com.studentplatform.admin.model.Topic;
 import au.com.studentplatform.admin.service.ClassRoomService;
 import au.com.studentplatform.admin.service.SubjectService;
 import au.com.studentplatform.admin.service.TopicService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/app")
@@ -93,11 +94,13 @@ public class TopicController {
 	
 	@GetMapping("/student/topics/subjectId/{subjectId}")
 	//@ResponseBody
-	public String getSubjectTopicById(@PathVariable Integer subjectId, Model model) {
+	public String getSubjectTopicById(@PathVariable Integer subjectId, Model model , HttpSession session) {
 			//model.addAttribute("topicList", topicService.getTopicBySubjectId(subjectId));
 			List<Topic> topics =  topicService.getTopicBySubjectId(subjectId);
 			
 			model.addAttribute("topicList", topics);
+			model.addAttribute("studentName",  (String) session.getAttribute("USER_NAME"));
+		    model.addAttribute("activePage", "subjects");
 		
 		return "students/topics";
 	}

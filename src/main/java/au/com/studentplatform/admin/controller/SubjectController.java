@@ -17,6 +17,7 @@ import au.com.studentplatform.admin.model.Subject;
 import au.com.studentplatform.admin.service.ClassRoomService;
 import au.com.studentplatform.admin.service.CountryService;
 import au.com.studentplatform.admin.service.SubjectService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/app")
@@ -44,12 +45,15 @@ public class SubjectController {
 	}
 	@GetMapping("/student/subjects/classid/{classId}")
 	//@ResponseBody
-	public String getSubjectsByClassId(@PathVariable Integer classId, Model model) {
+	public String getSubjectsByClassId(@PathVariable Integer classId, Model model , HttpSession session) {
 		// model.addAttribute("subjectList",
 		// subjectService.getSubjectsByClassId(classId));
 
 		List<Subject>  subjects = subjectService.getSubjectsByClassId(classId);
 		model.addAttribute("subjectList",subjects);
+		
+		model.addAttribute("studentName",  (String) session.getAttribute("USER_NAME"));
+	    model.addAttribute("activePage", "subjects");
 		
 		return "students/subjects";
 	}
