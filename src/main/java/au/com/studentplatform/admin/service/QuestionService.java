@@ -71,12 +71,39 @@ public class QuestionService {
 
 		        return questionRepository.findQuestionsWithOptions(ids);
 
-		  /*  } else {
+		  /* } else {
 		        Topic topic = topicRepository.findById(topicId)
 		                .orElseThrow(() -> new RuntimeException("Topic not found"));
 
 		        return questionRepository.findByTopic(topic);
 		    }*/
+	}
+	
+	public List<Question> getUnattemptedQuestions(Integer topicId, String mode, String userEmail) {
+
+		if (TestMode.EXAM.name().equals(mode)) {
+
+			Pageable pageable = PageRequest.of(0, 20);
+
+			List<Integer> ids = questionRepository.findRandomQuestionIds(topicId, pageable);
+
+			if (ids.isEmpty()) {
+				return List.of();
+			}
+
+			return questionRepository.findQuestionsWithOptions(ids);
+
+		} else {
+
+			Topic topic = topicRepository.findById(topicId)
+		            .orElseThrow(() -> new RuntimeException("Topic not found"));
+
+		    return questionRepository.findUnattemptedQuestions(
+		            topic,
+		            userEmail,
+		            PageRequest.of(0, 20)   // ✅ max 20 questions
+		    );
+		}
 	}
 	
 	@Transactional

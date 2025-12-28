@@ -51,8 +51,10 @@ public class QuizController {
 
 		TestSession testSession = testService.createSession(topicId, mode, ""+session.getAttribute("USER_EMAIL"));
 		session.setAttribute("testSessionId", testSession.getId());
+		String email = ""+session.getAttribute("USER_EMAIL");
 
-		List<Integer> questionIds = questionService.getQuestions(topicId, mode).stream().map(Question::getId).toList();
+		//List<Integer> questionIds = questionService.getQuestions(topicId, mode).stream().map(Question::getId).toList();
+		List<Integer> questionIds = questionService.getUnattemptedQuestions(topicId, mode, email).stream().map(Question::getId).toList();
 
 		session.setAttribute("questionIds", questionIds);
 		session.setAttribute("currentIndex", 0);

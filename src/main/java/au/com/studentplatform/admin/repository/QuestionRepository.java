@@ -69,4 +69,25 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 		""")
 		List<Question> findQuestionsWithOptions(@Param("ids") List<Integer> ids);
 
+	@Query("""
+		    SELECT q
+		    FROM Question q
+		    WHERE q.topic = :topic
+		      AND q.id NOT IN (
+		          SELECT ua.question.id
+		          FROM UserAnswer ua
+		          WHERE ua.sessionId IN (
+		              SELECT ts.id
+		              FROM TestSession ts
+		              WHERE ts.email = :email
+		          ) and ua.isCorrect = true
+		      )
+		""")
+		List<Question> findUnattemptedQuestions(
+		        @Param("topic") Topic topic,
+		        @Param("email") String email,
+		        Pageable pageable
+		);
+
+
 }

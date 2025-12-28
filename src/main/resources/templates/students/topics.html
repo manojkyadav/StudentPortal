@@ -52,12 +52,12 @@
 						<div class="topic-actions">
 							<!-- PRACTICE -->
 							<button class="btn btn-primary btn-sm" th:data-topic="${topic.topicName}" th:data-subject="${topic.subject.subjectName}"
-								th:data-topic-id="${topic.id}" data-mode="PRACTICE" onclick="openTestModal(this)">
+								th:data-topic-id="${topic.id}" th:data-topic-class="${topic.classRoom.className}"  data-mode="PRACTICE" onclick="openTestModal(this)">
 								Practice
 							</button>
 							<!-- EXAM -->
 							<button class="btn btn-outline btn-sm" th:data-topic="${topic.topicName}" th:data-subject="${topic.subject.subjectName}"
-								th:data-topic-id="${topic.id}" data-mode="EXAM" onclick="openTestModal(this)">
+								th:data-topic-id="${topic.id}" th:data-topic-class="${topic.classRoom.className}" data-mode="EXAM" onclick="openTestModal(this)">
 								Exam
 							</button>
 						</div>
@@ -108,11 +108,14 @@
 		    const topicName = btn.dataset.topic;
 		    const subjectName = btn.dataset.subject;
 		    const topicId = btn.dataset.topicId;
+			const className = btn.dataset.topicClass;
 		    const defaultMode = btn.dataset.mode || 'PRACTICE';
 
 		    document.getElementById('modalTopic').innerText = topicName;
 		    document.getElementById('modalSubject').innerText = subjectName;
 		    document.getElementById('modalClass').innerText = topicId;
+			document.getElementById('modalClassName').innerText = className;
+			
 
 		    document.querySelectorAll('input[name="mode"]').forEach(radio => {
 		        radio.checked = (radio.value === defaultMode);
@@ -148,7 +151,8 @@
 
 			<div class="modal-info">
 				<p><strong>Subject:</strong> <span id="modalSubject">Physics</span></p>
-				<p><strong>Class:</strong> <span id="modalClass">Mathematics</span></p>
+				<p><strong>Class:</strong> <span id="modalClassName">Year 1</span></p>
+				<input id="modalClass" type="hidden" name="modalClass" value="">
 			</div>
 
 			<div class="modal-section">
