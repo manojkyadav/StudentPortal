@@ -59,8 +59,9 @@ public class TestSession {
 	    public TestSession() {
 	    }
 
-	    public TestSession(String email, Integer topicId, TestMode mode) {
-	        this.email = email;
+	    public TestSession(Integer id, String email, Integer topicId, TestMode mode) {
+	        this.id=id;
+	    	this.email = email;
 	        this.topicId = topicId;
 	        this.mode = mode;
 	        this.startTime = LocalDateTime.now();

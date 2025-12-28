@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,28 +16,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import au.com.studentplatform.admin.model.CreateStudentRequest;
 import au.com.studentplatform.admin.model.Student;
+import au.com.studentplatform.admin.model.TestStatus;
 import au.com.studentplatform.admin.model.UpdateStudentRequest;
 import au.com.studentplatform.admin.model.UserRole;
 import au.com.studentplatform.admin.repository.NotificationRepository;
 import au.com.studentplatform.admin.repository.StudentRepository;
 import au.com.studentplatform.admin.service.ClassRoomService;
 import au.com.studentplatform.admin.service.StudentService;
+import jakarta.servlet.http.HttpSession;
+import au.com.studentplatform.admin.service.TestSessionService;
 
 @Controller
 @RequestMapping("/app")
 public class StudentController {
 
 	private final StudentService studentService;
-	private final ClassRoomService classroomService;
+	private final TestSessionService testSessionService;
 	
 	@Autowired
 	NotificationRepository notificationRepo;
 	@Autowired StudentRepository studentRepo;
 
-	public StudentController(StudentService studentService,  ClassRoomService classroomService) {
+	public StudentController(StudentService studentService,  TestSessionService testSessionService) {
 		this.studentService = studentService;
-		this.classroomService = classroomService;
+		this.testSessionService = testSessionService;
 	}
+	
+	
+	 @GetMapping("/student/progress")
+    public String getProgress(Model model , HttpSession session) {
+		 
+		 String email = (String) session.getAttribute("USER_EMAIL");
+		 
+        model.addAttribute("examsession",testSessionService.getSubjectsByClassId(email, TestStatus.SUBMITTED));
+        model.addAttribute("recentActivities",testSessionService.getRecentActivities(email));
+        model.addAttribute("activePage", "progress");
+        
+        return  "students/progress";
+    }
+	
 	  @PostMapping("/register/student")
 	    public String createStudent(@ModelAttribute CreateStudentRequest request) {
 	         studentService.createStudent(

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Student Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+
+	<div class="dashboard-layout">
+
+		<!-- Sidebar -->
+		<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+
+		<!-- Main Content -->
+		<main class="main-content">
+
+			<!-- Header -->
+			<div class="page-header">
+				<h1 class="page-title">Track your learning progress</h1>
+			</div>
+
+
+			<!-- Recent Activity -->
+			<div class="table-container">
+				
+
+				<table>
+					<thead>
+						<tr>
+							<th>Topic</th>
+							<th>Subject</th>
+							<th>Mode</th>
+							<th>Score</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="ra : ${recentActivities}">
+							<td>
+							    <a th:href="@{/app/student/practicequizresult(testSessionId=${ra.sessionId})}"
+							       th:text="${ra.topicName}">
+							    </a>
+							</td>
+							<td th:text="${ra.subjectName}"></td>
+							<td>
+								<span class="badge badge-info"
+									th:classappend="${ra.mode == 'EXAM'} ? 'badge-info' : 'badge-warning'"
+									th:text="${ra.mode}">
+								</span>
+							</td>
+							<td>
+								<span class="badge badge-success"
+									th:text="${#numbers.formatDecimal(ra.score,1,2)} + '%'">
+								</span>
+							</td>
+							<td th:text="${#temporals.format(ra.completedAt,'dd/MM/yyyy')}"></td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+
+		</main>
+	</div>
+
+	<script>
+		feather.replace();
+	</script>
+
+</body>
+
+</html>

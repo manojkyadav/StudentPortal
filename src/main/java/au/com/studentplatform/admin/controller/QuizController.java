@@ -79,38 +79,13 @@ public class QuizController {
 	}
 	
 	@GetMapping("/student/practicequizresult")
-	public String practicequizresult(Model model, HttpSession session) {
-		/*Integer sessionId = (Integer) session.getAttribute("testSessionId");
-		testService.evaluateTest(sessionId);
-
-		List<UserAnswer> answers = userAnswerService.findBySessionId(sessionId);
-		int score = 0;
-
-		for (UserAnswer a : answers) {
-			if (a.getIsCorrect()) {
-				score += 1;//
-				//a.getQuestionId().getMarks();
-			}
+	public String practicequizresult(@RequestParam(required = false) String testSessionId, Model model, HttpSession session) {
+		Integer sessionId;
+		if(testSessionId != null) {
+			sessionId  = Integer.parseInt(testSessionId);
+		}else {
+			sessionId = (Integer) session.getAttribute("testSessionId");
 		}
-
-		TestSession currentSession = testSessionRepository.findById(sessionId).get();
-		currentSession.setObtainedMarks(score);
-		currentSession.setStatus(TestStatus.SUBMITTED);
-		testSessionRepository.save(currentSession);
-
-		model.addAttribute("studentName", "Pihu Yadav");
-
-		model.addAttribute("score", 100.0);
-		model.addAttribute("correctCount", 1);
-		model.addAttribute("incorrectCount", 0);
-
-		model.addAttribute("question", "What is Newton’s first law?");
-		model.addAttribute("userAnswer", "Law of inertia");
-		model.addAttribute("correctAnswer", "Law of inertia");
-		model.addAttribute("explanation",
-				"Newton’s first law states that an object at rest stays at rest unless acted upon by an external force.");
-*/
-		Integer sessionId = (Integer) session.getAttribute("testSessionId");
 
 	    // 1️⃣ Fetch answers
 	    List<UserAnswer> answers = userAnswerService.findBySessionId(sessionId);

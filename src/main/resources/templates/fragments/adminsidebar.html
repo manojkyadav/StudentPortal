@@ -1,0 +1,26 @@
+<!-- fragments/sidebar.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sidebarFragment">
+	<aside class="sidebar">
+				<div class="sidebar-logo">LearnHub</div>
+				<ul class="sidebar-menu">
+					<li><a href="/app/admin/dashboard" class="sidebar-link active"><i data-feather="grid"></i>Dashboard</a></li>
+					<li><a href="/app/admin/classes" class="sidebar-link"><i data-feather="book-open"></i>Classes</a></li>
+					<li><a href="/app/admin/subjects" class="sidebar-link"><i data-feather="file-text"></i>Subjects</a></li>
+					<li><a href="/app/admin/topics" class="sidebar-link"><i data-feather="bookmark"></i>Topics</a></li>
+					<li><a href="/app/admin/questions" class="sidebar-link"><i data-feather="award"></i>Questions</a></li>
+					<li><a href="/app/admin/students" class="sidebar-link"><i data-feather="users"></i>Students</a></li>
+				</ul>
+
+				<div class="sidebar-footer">
+					<div class="user-info">
+						<div class="user-name"><span th:text="${session.USER_NAME}">User Name</span></div>
+						<div class="user-role"><span th:text="${session.USER_ROLE}">User Name</span></div>
+					</div>
+					<button class="btn btn-secondary btn-sm">Logout</button>
+				</div>
+			</aside>
+</div>
+
+</html>

@@ -13,8 +13,10 @@
 				</a>
 			</li>
 			<li>
-				<a href="/app/student/subjects/classid/13" class="sidebar-link" th:classappend="${activePage == 'subjects'} ? ' active'">
-					<i data-feather="bookmark"></i> Subjects
+				<a th:href="@{/app/student/subjects/classid/{classId}(classId=${session.USER_CLASS})}"
+				   class="sidebar-link"
+				   th:classappend="${activePage == 'subjects'} ? ' active'">
+				    <i data-feather="bookmark"></i>Practice/Exam
 				</a>
 			</li>
 			<li>

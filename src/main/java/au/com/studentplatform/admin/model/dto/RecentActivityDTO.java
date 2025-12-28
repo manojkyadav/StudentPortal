@@ -6,18 +6,22 @@ import au.com.studentplatform.admin.model.TestMode;
 
 public class RecentActivityDTO {
 
+	private Integer sessionId;
+	private String subjectName;
 	private Integer topicId;
 	private String topicName;
 	private TestMode mode;
 	private Double score;
 	private LocalDateTime completedAt;
 
-	public RecentActivityDTO(Integer topicId, String topicName, TestMode mode, Double score, LocalDateTime completedAt) {
+	public RecentActivityDTO(Integer sessionId, String subjectName, Integer topicId, String topicName, TestMode mode, Double score, LocalDateTime completedAt) {
 		this.topicId = topicId;
 		this.mode = mode;
 		this.score = score;
 		this.completedAt = completedAt;
 		this.topicName=topicName;
+		this.sessionId=sessionId;
+		this.subjectName=subjectName;
 	}
 
 	public String getTopicName() {
@@ -30,6 +34,14 @@ public class RecentActivityDTO {
 
 	public void setTopicId(Integer topicId) {
 		this.topicId = topicId;
+	}
+
+	public String getSubjectName() {
+		return subjectName;
+	}
+
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
 	}
 
 	public void setMode(TestMode mode) {
@@ -58,6 +70,14 @@ public class RecentActivityDTO {
 
 	public LocalDateTime getCompletedAt() {
 		return completedAt;
+	}
+
+	public Integer getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(Integer sessionId) {
+		this.sessionId = sessionId;
 	}
 
 }

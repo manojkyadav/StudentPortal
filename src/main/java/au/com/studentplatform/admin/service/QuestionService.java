@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import au.com.studentplatform.admin.model.Question;
@@ -47,6 +48,7 @@ public class QuestionService {
 	}
 
 	public List<Question> getQuestions(Integer topicId, String mode) {
+		/*
 		if (mode.equals(TestMode.EXAM)) {
 			return questionRepository.findRandomQuestions(topicId, PageRequest.of(0, 20));
 		} else {
@@ -55,7 +57,26 @@ public class QuestionService {
 			List<Question> questions = questionRepository.findByTopic(topic);
 
 			return questions;
-		}
+		}*/
+		// if (TestMode.EXAM.name().equals(mode)) {
+
+		        Pageable pageable = PageRequest.of(0, 20);
+
+		        List<Integer> ids =
+		                questionRepository.findRandomQuestionIds(topicId, pageable);
+
+		        if (ids.isEmpty()) {
+		            return List.of();
+		        }
+
+		        return questionRepository.findQuestionsWithOptions(ids);
+
+		  /*  } else {
+		        Topic topic = topicRepository.findById(topicId)
+		                .orElseThrow(() -> new RuntimeException("Topic not found"));
+
+		        return questionRepository.findByTopic(topic);
+		    }*/
 	}
 	
 	@Transactional

@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import au.com.studentplatform.admin.model.TestSession;
 import au.com.studentplatform.admin.model.dto.RecentActivityDTO;
 import au.com.studentplatform.admin.model.dto.TopicPerformanceDTO;
+import au.com.studentplatform.admin.model.TestStatus;
 
 public interface TestSessionRepository extends JpaRepository<TestSession, Integer> {
 
@@ -71,16 +72,25 @@ public interface TestSessionRepository extends JpaRepository<TestSession, Intege
 	 */
 	@Query("""
 			    SELECT new au.com.studentplatform.admin.model.dto.RecentActivityDTO(
-			        t.topicId, topic.topicName,
+			        t.id, subj.subjectName, t.topicId, topic.topicName,
 			        t.mode,
 			        (t.obtainedMarks * 100.0) / t.totalMarks,
 			        t.endTime
 			    )
-			    FROM TestSession t, Topic topic
+			    FROM TestSession t, Topic topic, Subject subj
 			    WHERE t.email = :email
+			      AND topic.subject.id= subj.id
 			      AND t.status = au.com.studentplatform.admin.model.TestStatus.SUBMITTED
 			       AND t.topicId = topic.id
 			    ORDER BY t.endTime DESC
 			""")
 	List<RecentActivityDTO> recentActivities(@Param("email") String email, Pageable pageable);
+	
+	@Query("""
+	        SELECT ts.id
+	        FROM TestSession ts
+	        WHERE ts.email = :userId
+	          AND ts.status = :status
+	    """)
+	    List<Integer> findSessionIdsByUserIdAndStatus(@Param("userId") String userId,@Param("status")  TestStatus status);
 }

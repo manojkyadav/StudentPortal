@@ -56,25 +56,8 @@
 	<div class="dashboard-layout">
 
 		<!-- Sidebar -->
-		<aside class="sidebar">
-			<div class="sidebar-logo">LearnHub</div>
-			<ul class="sidebar-menu">
-				<li><a href="/app/admin/dashboard" class="sidebar-link"><i data-feather="grid"></i>Dashboard</a></li>
-				<li><a href="/app/admin/classes" class="sidebar-link"><i data-feather="book-open"></i>Classes</a></li>
-				<li><a href="/app/admin/subjects" class="sidebar-link active"><i data-feather="file-text"></i>Subjects</a></li>
-				<li><a href="/app/admin/topics" class="sidebar-link"><i data-feather="bookmark"></i>Topics</a></li>
-				<li><a href="/app/admin/questions" class="sidebar-link"><i data-feather="award"></i>Questions</a></li>
-				<li><a href="/app/admin/students" class="sidebar-link"><i data-feather="users"></i>Students</a></li>
-			</ul>
-
-			<div class="sidebar-footer">
-				<div class="user-info">
-					<div class="user-name">Manoj Yadav</div>
-					<div class="user-role">Admin</div>
-				</div>
-				<button class="btn btn-secondary btn-sm">Logout</button>
-			</div>
-		</aside>
+		<div th:replace="fragments/adminsidebar :: sidebarFragment"></div>
+		
 		<main class="main-content">
 			<div class="main-content">
 				<h1>Subject Management</h1>
@@ -97,8 +80,8 @@
 								<td th:text="${s.classRoom?.className}">Classroom</td>
 								<td th:text="${s.description}">Description</td>
 								<td>
-									<a th:href="@{|/app/subjects/edit/${s.id}|}" class="btn btn-sm btn-outline-primary">Edit</a>
-									<a th:href="@{|/app/subjects/delete/${s.id}|}" class="btn btn-sm btn-outline-danger"
+									<a th:href="@{|/app/admin/subjects/edit/${s.id}|}" class="btn btn-sm btn-outline-primary">Edit</a>
+									<a th:href="@{|/app/admin/subjects/delete/${s.id}|}" class="btn btn-sm btn-outline-danger"
 										onclick="return confirm('Delete?')">Delete</a>
 								</td>
 							</tr>
@@ -113,7 +96,7 @@
 		<div class="modal-content">
 			<div class="modal-header">Add New Subject</div>
 
-			<form  th:action="@{/app/subjects/save}" th:object="${subject}" method="post">
+			<form  th:action="@{/app/admin/subjects/save}" th:object="${subject}" method="post">
 				<input type="hidden" th:field="*{id}" />
 				<div class="form-group">
 					<label class="form-label">Subject Name</label>

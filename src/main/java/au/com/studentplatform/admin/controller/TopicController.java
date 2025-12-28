@@ -19,6 +19,7 @@ import au.com.studentplatform.admin.service.ClassRoomService;
 import au.com.studentplatform.admin.service.SubjectService;
 import au.com.studentplatform.admin.service.TopicService;
 import jakarta.servlet.http.HttpSession;
+import au.com.studentplatform.admin.common.GenericTopicGenerator;
 
 @Controller
 @RequestMapping("/app")
@@ -27,12 +28,14 @@ public class TopicController {
 	private final ClassRoomService classroomService;
 	private final SubjectService subjectService;
 	private final TopicService topicService;
+	private final GenericTopicGenerator genericTopicGenerator;
 
 	public TopicController(ClassRoomService classroomService, SubjectService subjectService,
-			TopicService topicService) {
+			TopicService topicService, GenericTopicGenerator genericTopicGenerator) {
 		this.topicService = topicService;
 		this.classroomService = classroomService;
 		this.subjectService = subjectService;
+		this.genericTopicGenerator=genericTopicGenerator;
 	}
 
 	// ---------- TOPICS ----------
@@ -86,7 +89,9 @@ public class TopicController {
 
 	// student dashboard -------
 	@GetMapping("/student/topics")
-	public String studentTopics(Model model) {
+	public String studentTopics(HttpSession session, Model model) {
+		
+		
 		model.addAttribute("topics", topicService.findAll());
 		
 		return "students/topics";
@@ -105,5 +110,19 @@ public class TopicController {
 		return "students/topics";
 	}
 	
+	@GetMapping("/admin/topics/subjectId/generictopic")
+	//@ResponseBody
+	public String generateTopics(@RequestParam   int classId, @RequestParam  int subjectId) {
+			
+			try {
+				genericTopicGenerator.generateTopics(classId, subjectId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			return "success";
+		}
 
 }

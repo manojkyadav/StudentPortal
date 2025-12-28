@@ -49,4 +49,24 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 		    WHERE q.id = :id
 		""")
 		Optional<Question> findByIdWithOptions(@Param("id") Integer id);
+	
+	//------temp---------------
+	@Query("""
+		    SELECT q.id
+		    FROM Question q
+		    WHERE q.topic.id = :topicId
+		    ORDER BY function('RAND')
+		""")
+		List<Integer> findRandomQuestionIds(
+		        @Param("topicId") Integer topicId,
+		        Pageable pageable
+		);
+	@Query("""
+		    SELECT DISTINCT q
+		    FROM Question q
+		    LEFT JOIN FETCH q.options
+		    WHERE q.id IN :ids
+		""")
+		List<Question> findQuestionsWithOptions(@Param("ids") List<Integer> ids);
+
 }

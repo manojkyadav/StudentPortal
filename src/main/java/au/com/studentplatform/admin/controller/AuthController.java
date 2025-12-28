@@ -60,6 +60,7 @@ public class AuthController {
 			session.setAttribute("USER_ROLE", student.getRole().name());
 			session.setAttribute("USER_NAME", student.getName());
 			session.setAttribute("USER_EMAIL", student.getEmail());
+			session.setAttribute("USER_CLASS", student.getClassRoomId());
 
 			// Role-based redirect
 			return switch (student.getRole()) {

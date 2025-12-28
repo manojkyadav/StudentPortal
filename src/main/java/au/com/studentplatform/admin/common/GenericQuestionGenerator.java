@@ -44,16 +44,19 @@ public class GenericQuestionGenerator {
 
     @Value("${google.gemini.api.key}")
     private String geminiApiKey;
+    
+    @Value("${google.gemini.api.url}")
+    private String GEMINI_URL;
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String GEMINI_URL ="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
+    //private static final String GEMINI_URL ="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
 
     public void generateQuestions(
             int classId,
             int subjectId,
-            String topicName,
+            int topicId,
             int totalQuestions,
             int batchSize) throws Exception {
 
@@ -63,7 +66,7 @@ public class GenericQuestionGenerator {
         Subject subject = subjectRepo.findById(subjectId)
                 .orElseThrow(() -> new RuntimeException("Subject not found"));
 
-        Topic topic = topicRepo.findByTopicName(topicName)
+        Topic topic = topicRepo.findById(topicId)
                 .orElseThrow(() -> new RuntimeException("Topic not found"));
 
         int batches = (int) Math.ceil((double) totalQuestions / batchSize);
@@ -74,7 +77,7 @@ public class GenericQuestionGenerator {
                     Math.min(batchSize, totalQuestions - batch * batchSize);
 
             String prompt = """
-            		Generate %d Year 7 Australian curriculum mathematics questions 
+            		Generate %d Year "%s" Australian curriculum "%s" questions 
             		for the topic "%s".
 
             		Rules:
@@ -98,7 +101,7 @@ public class GenericQuestionGenerator {
             		    ]
             		  }
             		]
-            		""".formatted(batchSize, topicName);
+            		""".formatted(batchSize, classRoom.getClassName(), subject.getSubjectName(), topic.getTopicName());
 
 
             String requestBody = """
@@ -133,6 +136,12 @@ public class GenericQuestionGenerator {
                     .path("text")
                     .asText();
 
+            
+            content = content
+                    .replaceAll("(?s)```json", "")
+                    .replaceAll("(?s)```", "")
+                    .trim();
+            
             // Parse Gemini JSON output
             QuestionDTO[] questions =
                     objectMapper.readValue(content, QuestionDTO[].class);
@@ -165,7 +174,7 @@ public class GenericQuestionGenerator {
             System.out.println("Saved batch " + (batch + 1));
         }
 
-        System.out.println("All questions generated for topic: " + topicName);
+        System.out.println("All questions generated for topic: " + topicId);
     }
 
     // DTO for Gemini JSON

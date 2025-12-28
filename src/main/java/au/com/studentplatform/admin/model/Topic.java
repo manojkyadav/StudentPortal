@@ -37,7 +37,7 @@ public class Topic {
 	@Column(name = "topic_name", length = 150, nullable = true)
 	private String topicName;
 
-	@Column(length = 255)
+	@Column(length = 1000)
 	private String description;
 
 	@Column(name = "created_at", columnDefinition = "TIMESTAMP")

@@ -81,20 +81,22 @@ public class SubjectController {
 	public String savesubject(@ModelAttribute Subject subject, RedirectAttributes ra) {
 		subjectService.save(subject);
 		ra.addFlashAttribute("success", "subject saved");
-		return "redirect:/app/subjects";
+		return "redirect:/app/admin/subjects";
 	}
 
 	@GetMapping("/admin/subjects/delete/{id}")
 	public String deletesubject(@PathVariable Integer id, RedirectAttributes ra) {
 		subjectService.deleteById(id);
 		ra.addFlashAttribute("success", "subject deleted");
-		return "redirect:/app/subjects";
+		return "redirect:/app/admin/subjects";
 	}
 
 	// student dashboard -------
 	@GetMapping("/student/subjects")
-		public String studentSubjects(Model model) {
-		model.addAttribute("subjects", subjectService.findAll());
+		public String studentSubjects(HttpSession session, Model model) {
+		
+		model.addAttribute("subjects", subjectService.getSubjectsByClassId(Integer.parseInt(""+session.getAttribute("USER_CLASS"))));
+		//model.addAttribute("subjects", subjectService.findAll());
 		return "students/subjects";
 	}
 }

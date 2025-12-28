@@ -29,14 +29,14 @@ public class QuestionController {
 	private final SubjectService subjectService;
 	private final TopicService topicService;
 	private final QuestionService questionService;
-	private final GenericQuestionGenerator genericQuestionGenerator;
+	
 
-	public QuestionController(QuestionService questionService,ClassRoomService classroomService, SubjectService subjectService, TopicService topicService, GenericQuestionGenerator genericQuestionGenerator) {
+	public QuestionController(QuestionService questionService,ClassRoomService classroomService, SubjectService subjectService, TopicService topicService) {
 		this.topicService = topicService;
 		this.classroomService = classroomService;
 		this.subjectService = subjectService;
 		this.questionService = questionService;
-		this.genericQuestionGenerator = genericQuestionGenerator;
+		
 	}
 
 	// ---------- QUESTIONS ----------
@@ -59,31 +59,7 @@ public class QuestionController {
 
 			return "admin/questions";
 		}
-	/*
-		@GetMapping("/questions/new")
-		public String newQuestionForm(@RequestParam(required = false) Integer classId,
-				@RequestParam(required = false) Integer subjectId, Model model) {
-			model.addAttribute("question", new Question());
-			// model.addAttribute("topics", topicService.findAll());
-
-			model.addAttribute("selectedClassId", classId);
-			model.addAttribute("selectedSubjectId", subjectId);
-
-			List<ClassRoom> classroomList = classroomService.findAll();
-			model.addAttribute("classroomList", classroomList);
-
-			if (classId != null) {
-				model.addAttribute("subjectList", subjectService.getSubjectsByClassId(classId));
-
-			}
-			if (subjectId != null) {
-				model.addAttribute("topicList", topicService.getTopicBySubjectId(subjectId));
-
-			}
-
-			return "questions/form";
-		}
-	*/
+	
 		@GetMapping("/admin/questions/edit/{id}")
 		public String editQuestion(@PathVariable Integer id, @RequestParam(required = false) Integer classId,
 				@RequestParam(required = false) Integer subjectId, @RequestParam(required = false) Integer topicId,
@@ -128,23 +104,4 @@ public class QuestionController {
 			ra.addFlashAttribute("success", "Question deleted");
 			return "redirect:/app/adminquestions";
 		}
-		
-		@GetMapping("/admin/questions/genericQuestionGenerator")
-		public String GenericQuestionGenerator(@RequestParam  int classId,
-				@RequestParam  int subjectId,
-				@RequestParam  String topicName,
-				@RequestParam  int totalQuestions,
-				@RequestParam  int batchSize) {
-			
-			try {
-				genericQuestionGenerator.generateQuestions(classId, subjectId, topicName, totalQuestions, batchSize);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			return "success";
-		}
-		
 }
