@@ -1,5 +1,5 @@
 package au.com.studentplatform.admin.config;
-
+/*
 import java.util.Collections;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -29,4 +29,4 @@ public class CustomUserDetailsService //implements UserDetailsService
 	 * .authorities(Collections.singletonList(new
 	 * SimpleGrantedAuthority(role))).build(); }
 	 */
-}
+//}*/

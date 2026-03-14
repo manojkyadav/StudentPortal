@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>Student Registration</title>
+	<title>User Registration</title>
 
 	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -13,13 +13,13 @@
 	<div class="auth-container">
 		<div class="auth-box">
 
-			<h1 class="auth-title">Student Registration</h1>
+			<h1 class="auth-title">User Registration</h1>
 			<p class="auth-subtitle">
-				Create your student account to access courses and exams
+				Create your User account to access courses and exams
 			</p>
 
 			<!-- Registration Form -->
-			<form th:action="@{/app/register/student}" method="post" th:object="${createStudentRequest}">
+			<form th:action="@{/app/register/user}" method="post" th:object="${createUserRequest}">
 
 				<!-- Full Name -->
 				<div class="form-group">
@@ -61,7 +61,7 @@
 				<input type="hidden" name="role" value="STUDENT" />
 
 				<button type="submit" class="btn btn-primary btn-block">
-					Create Student Account
+					Create User Account
 				</button>
 			</form>
 

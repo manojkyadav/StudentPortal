@@ -8,22 +8,53 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import au.com.studentplatform.admin.service.CustomUserDetailsService;
+
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
+	private final CustomUserDetailsService userDetailsService;
+    private final CustomAuthSuccessHandler successHandler;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService, CustomAuthSuccessHandler successHandler) {
+        this.userDetailsService = userDetailsService;
+        this.successHandler = successHandler;
+    }
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/app/login", "/app/register", "/app/register/user", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/app/admin/**").hasRole("ADMIN")
+                .requestMatchers("/app/student/**").hasRole("STUDENT")
+                .anyRequest().authenticated()
+            )
+                .formLogin(form -> form
+                	    .loginPage("/app/login")
+                	    .usernameParameter("email")   // ✅ IMPORTANT
+                	    .passwordParameter("password")
+                	    //.defaultSuccessUrl("/app/student/dashboard", true)
+                	    .defaultSuccessUrl("/app/login", true)
+                	    .failureUrl("/app/login?error=true")
+                	    .successHandler(successHandler) // ✅ HERE
+                	    .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/app/logout")
+                .logoutSuccessUrl("/app/login?logout=true")
+                .invalidateHttpSession(true)
+            )
+            .userDetailsService(userDetailsService);
+
+        return http.build();
+    }
+
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth
-				.requestMatchers("/css/**", "/js/**", "/images/**", "/", "/home", "/register","/**",  "/doRegister", "/login")
-				.permitAll().requestMatchers("/**").hasAuthority("ADMIN").anyRequest().authenticated())
-				.formLogin(f -> f.loginPage("/login").defaultSuccessUrl("/dashboard", true).permitAll())
-				.logout(l -> l.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll());
-		return http.build();
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
-	
-	  @Bean
-	    public PasswordEncoder passwordEncoder() {
-	        return new BCryptPasswordEncoder();
-	    }
 }

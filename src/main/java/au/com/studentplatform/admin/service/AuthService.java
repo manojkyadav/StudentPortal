@@ -1,10 +1,8 @@
 package au.com.studentplatform.admin.service;
 
-import org.springframework.stereotype.Service;
-
-import au.com.studentplatform.admin.model.Student;
+import au.com.studentplatform.admin.model.User;
 
 //@Service
 public interface AuthService {
-    Student authenticate(String email, String password);
+	User authenticate(String email, String password);
 }

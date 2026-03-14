@@ -20,7 +20,7 @@ import au.com.studentplatform.admin.model.dto.GenericGeneratorDTO;
 import au.com.studentplatform.admin.service.ClassRoomService;
 import au.com.studentplatform.admin.service.DashboardService;
 import au.com.studentplatform.admin.service.QuestionService;
-import au.com.studentplatform.admin.service.StudentService;
+//import au.com.studentplatform.admin.service.StudentService;
 import au.com.studentplatform.admin.service.SubjectService;
 import au.com.studentplatform.admin.service.TopicService;
 import jakarta.servlet.http.HttpSession;
@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/app")
 public class AdminController {
 
-	private final StudentService studentService;
+	//private final StudentService studentService;
 	private final ClassRoomService classRoomService;
 	private final SubjectService subjectService;
 	private final TopicService topicService;
@@ -40,11 +40,12 @@ public class AdminController {
 	private final GenericTopicGenerator genericTopicGenerator;
 	private final ClassRoomService classroomService;
 
-	public AdminController(StudentService studentService, ClassRoomService classRoomService,
+	public AdminController(//StudentService studentService,
+			ClassRoomService classRoomService,
 			QuestionService questionService, SubjectService subjectService, TopicService topicService,
 			DashboardService dashboardService, GenericQuestionGenerator genericQuestionGenerator,
 			GenericTopicGenerator genericTopicGenerator, ClassRoomService classroomService) {
-		this.studentService = studentService;
+		//this.studentService = studentService;
 		this.classRoomService = classRoomService;
 		this.questionService = questionService;
 		this.subjectService = subjectService;
@@ -68,6 +69,7 @@ public class AdminController {
 
 		session.setAttribute("userName", "Manoj Yadav");
 		session.setAttribute("role", "Admin");
+		model.addAttribute("activePage", "dashboard");
 
 		return "admin/dashboard";
 	}
@@ -110,7 +112,7 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		
-		
+		model.addAttribute("activePage", "topicgenerator");
 		return "admin/topicgenerator";
 	}
 	
@@ -135,15 +137,25 @@ public class AdminController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		model.addAttribute("activePage", "genericQuestionGenerator");
 		
 		return "admin/questiongenerator";
 	}
+	/*@GetMapping("/admin/topic/topicgenerator")
+	public String topicsGenerator(Model model) {
+		
+		return "admin/topicgenerator";
+	}
 	
-	
+	@GetMapping("/admin/questions/genericQuestionGenerator")
+	public String questionGenerator(Model model) {
+		
+		return "admin/genericQuestionGenerator";
+	}
+	*/
 	@PostMapping("/admin/topic/topicgenerator")
 	public String createTopics(@ModelAttribute("question") GenericGeneratorDTO GenericGeneratorDTO,
-            RedirectAttributes ra) {
+			Model model) {
 		
 		try {
 			genericTopicGenerator.generateTopics(GenericGeneratorDTO.getClassId(), GenericGeneratorDTO.getSubjectId());
@@ -151,14 +163,14 @@ public class AdminController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		return "redirect:/app/admin/topic/topicgenerator";
+		//return "redirect:/app/admin/topic/topicgenerator";
+		model.addAttribute("activePage", "topicgenerator");
+		return "admin/topicgenerator";
 	}
 	
 	@PostMapping("/admin/questions/genericQuestionGenerator")
 	public String GenericQuestionGenerator(@ModelAttribute("question") GenericGeneratorDTO GenericGeneratorDTO,
-            RedirectAttributes ra) {
+			Model model) {
 		
 		try {
 			genericQuestionGenerator.generateQuestions(GenericGeneratorDTO.getClassId(), GenericGeneratorDTO.getSubjectId(), GenericGeneratorDTO.getTopicId(), 100, 1);
@@ -166,9 +178,9 @@ public class AdminController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		return "redirect:/app/admin/questions/genericQuestionGenerator";
+		//return "redirect:/app/admin/questions/genericQuestionGenerator";
+		model.addAttribute("activePage", "genericQuestionGenerator");
+		return "admin/genericQuestionGenerator";
 	}
 	
 }

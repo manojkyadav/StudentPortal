@@ -16,6 +16,9 @@
 		</div>
 		<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 		<button class="btn btn-primary">Login</button>
+
+		<div th:if="${param.error}">Invalid credentials</div>
+		<div th:if="${param.logout}">Logged out successfully</div>
 	</form>
 </div>
 </div>

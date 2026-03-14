@@ -63,6 +63,8 @@ public class SubjectController {
 		model.addAttribute("subjects", subjectService.findAll());
 		model.addAttribute("subject", new Subject());
 		model.addAttribute("classRoomList", classroomService.findAll());
+		model.addAttribute("activePage", "subjects");
+		
 		return "admin/subjects";
 	}
 
@@ -73,6 +75,7 @@ public class SubjectController {
 
 		ClassRoom classroom = classroomService.findById(subject.getClassRoom().getId());
 		model.addAttribute("classRoomList", classroom);
+		model.addAttribute("activePage", "subjects");
 
 		return "subject/form";
 	}
@@ -97,6 +100,7 @@ public class SubjectController {
 		
 		model.addAttribute("subjects", subjectService.getSubjectsByClassId(Integer.parseInt(""+session.getAttribute("USER_CLASS"))));
 		//model.addAttribute("subjects", subjectService.findAll());
+		model.addAttribute("activePage", "subjects");
 		return "students/subjects";
 	}
 }

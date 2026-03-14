@@ -49,6 +49,7 @@ public class TopicController {
 
 		model.addAttribute("topic", new Topic());
 		model.addAttribute("selectedClassId", classId);
+		model.addAttribute("activePage", "topics");
 
 		List<ClassRoom> classroomList = classroomService.findAll();
 		model.addAttribute("classroomList", classroomList);
@@ -63,6 +64,7 @@ public class TopicController {
 	@GetMapping("/admin/topics/edit/{id}")
 	public String editTopicForm(@PathVariable Integer id, Model model) {
 		model.addAttribute("topic", topicService.findById(id));
+		model.addAttribute("activePage", "topics");
 		return "topics/form";
 	}
 
@@ -93,6 +95,7 @@ public class TopicController {
 		
 		
 		model.addAttribute("topics", topicService.findAll());
+		model.addAttribute("activePage", "topics");
 		
 		return "students/topics";
 	}

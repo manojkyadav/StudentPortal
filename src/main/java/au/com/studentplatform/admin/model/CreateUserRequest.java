@@ -1,6 +1,6 @@
 package au.com.studentplatform.admin.model;
 
-public class CreateStudentRequest {
+public class CreateUserRequest {
 
 	private String name;
 	private String email;

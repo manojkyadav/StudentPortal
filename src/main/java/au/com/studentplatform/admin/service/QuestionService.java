@@ -117,5 +117,12 @@ public class QuestionService {
 		return questions.get();
 	    //return questionRepository.findByIdWithOptions(id).orElseThrow();
 	}
+	
+	public List<Question> filterQuestions(Integer classId, Integer subjectId, Integer topicId){
+		
+		return questionRepository.filterQuestions(classId, subjectId, topicId);
+		
+		
+	}
 
 }

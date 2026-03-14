@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import au.com.studentplatform.admin.common.GenericQuestionGenerator;
 import au.com.studentplatform.admin.model.ClassRoom;
 import au.com.studentplatform.admin.model.Option;
 import au.com.studentplatform.admin.model.Question;
@@ -43,19 +42,36 @@ public class QuestionController {
 	
 
 		@GetMapping("/admin/questions")
-		public String questions(Model model) {
+		public String questions(Model model, @RequestParam(required = false) Integer classId,
+				@RequestParam(required = false) Integer subjectId, @RequestParam(required = false) Integer topicId) {
 			//model.addAttribute("question", new Question());
 			
 			Question question = new Question();
 			question.getOptions().add(new Option()); // minimum one option
 	        model.addAttribute("question", question);
 	        
-			model.addAttribute("questions", questionService.findAll());
+			//model.addAttribute("questions", questionService.findAll());
+	        
+	        List<Question> questions =
+	                questionService.filterQuestions(classId, subjectId, topicId);
+	        model.addAttribute("questions", questions);
+	        
 
 			List<ClassRoom> classroomList = classroomService.findAll();
 			model.addAttribute("classroomList", classroomList);
 			model.addAttribute("questionTypes", Question.QuestionType.values());
 			model.addAttribute("difficultyLevels", Question.DifficultyLevel.values());
+			
+			if(subjectId != null)
+				model.addAttribute("topicList", topicService.getTopicBySubjectId(subjectId));
+			if(classId != null)
+			model.addAttribute("subjectList", subjectService.getSubjectsByClassId(classId));
+			
+
+		    model.addAttribute("selectedClassId", classId);
+		    model.addAttribute("selectedSubjectId", subjectId);
+		    model.addAttribute("selectedTopicId", topicId);
+		    model.addAttribute("activePage", "questions");
 
 			return "admin/questions";
 		}
@@ -73,6 +89,7 @@ public class QuestionController {
 			model.addAttribute("selectedClassId", classId);
 			model.addAttribute("selectedSubjectId", subjectId);
 			model.addAttribute("selectedTopicId", topicId);
+			model.addAttribute("activePage", "questions");
 
 			List<ClassRoom> classroomList = classroomService.findAll();
 			model.addAttribute("classroomList", classroomList);

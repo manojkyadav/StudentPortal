@@ -42,6 +42,7 @@ public class ClassesController {
 			List<Country> countryList = countryService.findAll();
 			model.addAttribute("countryList", countryList);
 			model.addAttribute("classroom", new ClassRoom());
+			model.addAttribute("activePage", "classes");
 
 			return "admin/classes";
 		}
@@ -52,7 +53,7 @@ public class ClassesController {
 			ClassRoom classes = classroomService.findById(id);
 			Country country = countryService.findById(classes.getCountry().getId());
 			model.addAttribute("countryList", country);
-
+			model.addAttribute("activePage", "classes");
 			model.addAttribute("classroom", classes);
 			return "admin/classes";
 		}

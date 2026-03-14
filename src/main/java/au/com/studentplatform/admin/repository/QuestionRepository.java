@@ -88,6 +88,17 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 		        @Param("email") String email,
 		        Pageable pageable
 		);
+	@Query("""
+			SELECT q FROM Question q
+			WHERE (:classId IS NULL OR q.classRoom.id = :classId)
+			  AND (:subjectId IS NULL OR q.subject.id = :subjectId)
+			  AND (:topicId IS NULL OR q.topic.id = :topicId)
+			""")
+			List<Question> filterQuestions(
+			    Integer classId,
+			    Integer subjectId,
+			    Integer topicId
+			);
 
 
 }

@@ -48,6 +48,12 @@
 			font-weight: 500;
 			transition: all 0.3s;
 		}
+		.filter-bar {
+		    display: grid;
+		    grid-template-columns: repeat(3, 1fr);
+		    gap: 1rem;
+		    margin-bottom: 1.5rem;
+		}
 	</style>
 </head>
 
@@ -65,6 +71,46 @@
 
 				<div class="class-table">
 					<a href="#" class="add-btn">+ Add Question</a>
+					<!-- 🔍 Filters -->
+					<form method="get" th:action="@{/app/admin/questions}" class="filter-bar">
+
+					    <select class="form-select"
+					            name="classId"
+					            onchange="onFilterClassChange(this.value)">
+					        <option value="">Select Classes</option>
+					        <option th:each="c : ${classroomList}"
+					                th:value="${c.id}"
+					                th:text="${c.className}"
+					                th:selected="${selectedClassId == c.id}">
+					        </option>
+					    </select>
+
+					    <select id="filterSubject"
+					            class="form-select"
+					            name="subjectId"
+					            onchange="onFilterSubjectChange(this.value)">
+					        <option value="">Select Subjects</option>
+					        <option th:each="s : ${subjectList}"
+					                th:value="${s.id}"
+					                th:text="${s.subjectName}"
+					                th:selected="${selectedSubjectId == s.id}">
+					        </option>
+					    </select>
+
+					    <select id="filterTopic"
+					            class="form-select"
+					            name="topicId"
+					            onchange="this.form.submit()">
+					        <option value="">Select Topics</option>
+					        <option th:each="t : ${topicList}"
+					                th:value="${t.id}"
+					                th:text="${t.topicName}"
+					                th:selected="${selectedTopicId == t.id}">
+					        </option>
+					    </select>
+
+					</form>
+
 					<table>
 						<thead>
 							<tr>
@@ -335,6 +381,51 @@
 		        row.querySelectorAll("input")[0].setAttribute("name", `options[${i}].text`);
 		        row.querySelectorAll("input")[1].setAttribute("name", `options[${i}].correct`);
 		    });
+		}
+		
+		function onFilterClassChange(classId) {
+		    const subjectSelect = document.getElementById("filterSubject");
+		    const topicSelect = document.getElementById("filterTopic");
+
+		    subjectSelect.innerHTML = `<option value="">All Subjects</option>`;
+		    topicSelect.innerHTML = `<option value="">All Topics</option>`;
+
+		    if (!classId) {
+		        subjectSelect.form.submit();
+		        return;
+		    }
+
+		    fetch('/app/admin/subjects/classid/' + classId)
+		        .then(res => res.json())
+		        .then(data => {
+		            data.forEach(s => {
+		                const opt = document.createElement("option");
+		                opt.value = s.id;
+		                opt.textContent = s.subjectName;
+		                subjectSelect.appendChild(opt);
+		            });
+		        });
+		}
+
+		function onFilterSubjectChange(subjectId) {
+		    const topicSelect = document.getElementById("filterTopic");
+		    topicSelect.innerHTML = `<option value="">All Topics</option>`;
+
+		    if (!subjectId) {
+		        topicSelect.form.submit();
+		        return;
+		    }
+
+		    fetch('/app/admin/topics/subjectId/' + subjectId)
+		        .then(res => res.json())
+		        .then(data => {
+		            data.forEach(t => {
+		                const opt = document.createElement("option");
+		                opt.value = t.id;
+		                opt.textContent = t.topicName;
+		                topicSelect.appendChild(opt);
+		            });
+		        });
 		}
 
 	</script>
