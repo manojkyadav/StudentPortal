@@ -1,4 +1,3 @@
-
 name: Deploy to AWS
 
 on:
@@ -32,4 +31,4 @@ jobs:
           environment_name: prod
           version_label: ${{ github.sha }}
           region: ap-southeast-2
-          deployment_package: target/adminplatform-1.0.0.jar
+          deployment_package: target/*.jar
